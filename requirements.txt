@@ -1,0 +1,8 @@
+torch>=1.9.0          # Deep learning (used by DWPose and your nodes)
+numpy>=1.20.0         # Array/matrix operations
+onnxruntime>=1.12.0   # ONNX model inference for DWPose
+opencv-python>=4.5.0  # Visualization (optional, useful for debugging or skeleton drawing)
+decord>=0.6.0         # Fast video decoding/reading
+tqdm>=4.62.0          # Progress bars for extraction
+Pillow>=8.0.0         # Image output (if used for previews/thumbnails)
+librosa>=0.9.0        # Audio/music beat analysis
