@@ -8,7 +8,6 @@ from typing import Tuple, Dict, Any
 
 # Import dwpose components
 from ..dwpose.dwpose_detector import dwpose_detector
-from ..dwpose.preprocess import get_video_pose
 
 
 class BAIS1C_PoseExtractor:
