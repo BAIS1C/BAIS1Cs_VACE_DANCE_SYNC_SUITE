@@ -1,5 +1,4 @@
 import os
-
 import numpy as np
 import torch
 
@@ -59,7 +58,12 @@ class DWposeDetector:
             return pose
 
 
+# Set the default path to comfyui\models\dwpose relative to this file.
+DEFAULT_DWPOSE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "models", "dwpose"))
+dwpose_dir = os.environ.get("dwpose", DEFAULT_DWPOSE_PATH)
+
 dwpose_detector = DWposeDetector(
-    model_det=os.path.join(os.environ["dwpose"],"yolox_l.onnx"),
-    model_pose=os.path.join(os.environ["dwpose"],"dw-ll_ucoco_384.onnx"),
-    device=device)
+    model_det=os.path.join(dwpose_dir, "yolox_l.onnx"),
+    model_pose=os.path.join(dwpose_dir, "dw-ll_ucoco_384.onnx"),
+    device=device
+)
