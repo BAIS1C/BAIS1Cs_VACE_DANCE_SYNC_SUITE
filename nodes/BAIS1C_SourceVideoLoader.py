@@ -3,13 +3,36 @@
 import numpy as np
 import traceback
 
-# Correct import for bundled helper in nodes/ dir
 from .enhanced_audio_analysis import EnhancedAudioAnalyzer
+
+def ensure_dict(input_obj):
+    """Utility to robustly convert VHS/VideoHelperSuite video_info to dict."""
+    if input_obj is None:
+        return {}
+    if isinstance(input_obj, dict):
+        return dict(input_obj)
+    # Handle classes with .to_dict() or .as_dict()
+    if hasattr(input_obj, "to_dict"):
+        return dict(input_obj.to_dict())
+    if hasattr(input_obj, "as_dict"):
+        return dict(input_obj.as_dict())
+    # Try vars()
+    if hasattr(input_obj, "__dict__"):
+        return dict(vars(input_obj))
+    # Try items()
+    if hasattr(input_obj, "items"):
+        return dict(input_obj.items())
+    # Last resort: string conversion
+    try:
+        return dict(input_obj)
+    except Exception:
+        pass
+    return {}
 
 class BAIS1C_SourceVideoLoader:
     """
     Minimal pass-through loader for images/audio + robust audio analysis.
-    Input: images, audio (optional), video_info (dict/meta)
+    Input: images, audio (optional), video_info (dict/meta from VHS/VideoHelper/etc)
     Output: images, audio, sync_meta (dict with audio/BPM etc), ui_info (summary)
     """
 
@@ -19,13 +42,12 @@ class BAIS1C_SourceVideoLoader:
             "required": {
                 "images": ("IMAGE",),          # Frame sequence from VHS_LoadVideo or similar
                 "audio": ("AUDIO",),           # Optional, but required for BPM/etc
-                "video_info": ("DICT",)        # Metadata dict from upstream node (VHS/VideoHelper/etc)
+                "video_info": ("VHS_VIDEOINFO",),       # Metadata dict (now robust to VHS_VIDEOINFO etc)
             }
         }
 
     RETURN_TYPES = ("IMAGE", "AUDIO", "DICT", "STRING")
     RETURN_NAMES = ("images", "audio", "sync_meta", "ui_info")
-
     FUNCTION = "execute"
     CATEGORY = "BAIS1C VACE Suite"
 
@@ -46,11 +68,11 @@ class BAIS1C_SourceVideoLoader:
             return None
 
     def execute(self, images, audio, video_info):
-        # Defensive copy to avoid mutating input dict
-        sync_meta = dict(video_info) if video_info else {}
+        # Fix: Accept VHS_VIDEOINFO and dict-like input robustly
+        sync_meta = ensure_dict(video_info)
         target_fps = float(sync_meta.get("fps", 24.0))
         audio_analysis = None
-        # Only analyze if audio is present
+
         if audio and audio.get("waveform") is not None and audio.get("sample_rate") is not None:
             audio_analysis = self.analyze_audio(audio, target_fps)
             if audio_analysis:
@@ -97,7 +119,17 @@ if __name__ == "__main__":
     test_waveform = np.sin(2 * np.pi * 2 * np.linspace(0, 1, sr))
     test_audio = {"waveform": test_waveform, "sample_rate": sr}
     test_images = "IMAGE_PLACEHOLDER"
-    test_meta = {"fps": 24.0, "duration": 1.0, "original_frame_count": 24}
+    # Simulate dict-like and object input for video_info
+    test_meta_dict = {"fps": 24.0, "duration": 1.0, "original_frame_count": 24}
+    class DummyInfo:  # Mimics VHS_VIDEOINFO
+        def __init__(self):
+            self.fps = 24.0
+            self.duration = 1.0
+            self.original_frame_count = 24
+        def to_dict(self):
+            return {"fps": self.fps, "duration": self.duration, "original_frame_count": self.original_frame_count}
+    test_meta_obj = DummyInfo()
     node = BAIS1C_SourceVideoLoader()
-    out = node.execute(test_images, test_audio, test_meta)
-    print("[TEST OUTPUT]", out[2])  # Print sync_meta
+    print("[TEST OUTPUT - dict]", node.execute(test_images, test_audio, test_meta_dict)[2])  # sync_meta
+    print("[TEST OUTPUT - obj]", node.execute(test_images, test_audio, test_meta_obj)[2])  # sync_meta
+
