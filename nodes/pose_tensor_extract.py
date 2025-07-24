@@ -7,7 +7,7 @@ import torch
 import decord
 from typing import List, Any
 
-from .dwpose_detector import dwpose_detector  # Assumed ready and globally initialized
+from ..dwpose.dwpose_detector import dwpose_detector  # Assumed ready and globally initialized
 
 class BAIS1C_PoseExtractor:
     """
