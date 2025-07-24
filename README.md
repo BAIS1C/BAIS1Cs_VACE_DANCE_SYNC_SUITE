@@ -1,39 +1,45 @@
-🕺 BAIS1C VACE Dance Sync Suite (BETA STILKLL BROKEN BUT TESTING)
-Professional toolkit for pose extraction, library management, and music-driven dance animation in ComfyUI.
-Full pipeline: video-to-pose extraction, library export, music-reactive dance generation, and precise BPM synchronization.
+🕺 BAIS1C VACE Dance Sync Suite (BETA STILL NEEDS FIXES)
+Professional ComfyUI toolkit for pose extraction, dance library management, and music-driven dance animation.
+Pipeline: video-to-pose extraction, library export, music-reactive dance generation, and frame-accurate BPM synchronization.
 
-🚀 Installation
-1. Clone the Repo
+🚀 Installation (Windows/ComfyUI)
+1. Clone or Download This Folder
 
-bash
+From your ComfyUI root, navigate to custom_nodes.
+
+Download or clone the suite into custom_nodes\BAIS1Cs_VACE_DANCE_SYNC_SUITE\.
+
+2. Install Required Python Packages
+
+Open a terminal or Anaconda Prompt as Administrator.
+
+Run:
+
+nginx
 Copy
 Edit
-cd custom_nodes
-git clone https://github.com/BAIS1C/BAIS1Cs_VACE_DANCE_SYNC_SUITE.git
-2. Install Python Dependencies
-
-bash
-Copy
-Edit
-pip install -r custom_nodes/BAIS1Cs_VACE_DANCE_SYNC_SUITE/requirements.txt
+pip install -r custom_nodes\BAIS1Cs_VACE_DANCE_SYNC_SUITE\requirements.txt
 3. Download Required DWPose Models
+
+Download the following ONNX model files:
 
 dw-ll_ucoco_384.onnx
 
 yolox_l.onnx
 
-Place models in:
+Place both files in:
 
-bash
 Copy
 Edit
-ComfyUI/models/dwpose/
-  ├── dw-ll_ucoco_384.onnx
-  └── yolox_l.onnx
-(Or set a custom path via DWPose environment variable.)
+ComfyUI\models\dwpose\
+(Create this folder if it does not exist. You may use a different folder by setting the DWPose environment variable, but this is the default and recommended path.)
 
-📋 Video Format & Pose Model Requirements
-Aspect ratios: 16:9 (landscape) or 9:16 (portrait)
+📋 Video & Pose Model Requirements
+Aspect ratios:
+
+16:9 (landscape)
+
+9:16 (portrait)
 
 Recommended resolutions:
 
@@ -41,53 +47,50 @@ Landscape: 832×468
 
 Portrait: 468×832
 
-Non-standard aspect ratios will distort pose detection and skeleton output.
+Important: Using other aspect ratios will distort skeletons and break pose accuracy.
 
-🎭 Available Nodes
-1. 🎥 BAIS1C Source Video Loader
+🎭 Node Overview
+🎥 BAIS1C Source Video Loader
 Category: BAIS1C VACE Suite/Source
 
-Loads video, extracts audio, BPM, frame rate, and all sync metadata.
+Loads video, extracts audio, BPM, FPS, and metadata for the sync pipeline.
 
-Outputs: processed video, audio, fps, bpm, frame count, duration, sync_meta dict.
+Outputs: video object, audio object, fps, bpm, frame count, duration, sync_meta dictionary.
 
-2. 🎯 BAIS1C Pose Extractor (128pt)
+🎯 BAIS1C Pose Extractor (128pt)
 Category: BAIS1C VACE Suite/Extraction
 
-Extracts 128-point pose tensors from video (DWPose), auto-saves as JSON for reuse.
+Extracts 128-point pose tensors from video using DWPose.
 
-Format: 23 body, 68 face, 21+16 hand keypoints (normalized).
+Saves as JSON for reuse and library-building.
 
-Inputs: video, sync_meta, title, debug, etc.
+Format: 23 body, 68 face, 21 left hand, 16 right hand (all normalized).
 
 Outputs: pose tensor (TENSOR), sync_meta (DICT).
 
-3. 🎵 BAIS1C Music Control Net (Auto-Sync)
+🎵 BAIS1C Music Control Net (Auto-Sync)
 Category: BAIS1C VACE Suite/Control
 
-Professional BPM-to-pose sync; frame-perfect timing, various sync/loop modes.
+Syncs pose libraries to any music source using professional BPM algorithms.
 
-Inputs: audio, target_fps, pose source (tensor or library), sync/loop methods, etc.
+Supports multiple sync/loop modes.
 
-Outputs: synced pose tensor, video visualization, sync report.
+Outputs: synced pose tensor, pose video (visualization), sync report.
 
-4. 🕺 BAIS1C Simple Dance Poser (Creative Playground)
+🕺 BAIS1C Simple Dance Poser (Creative Playground)
 Category: BAIS1C VACE Suite/Creative
 
-Fast, creative dance animation from library or built-in styles; user-tweakable speed, smoothing, music response.
+Generate creative dance animations with user-tunable style, speed, and music response.
 
-Inputs: audio, dance source, style, speed, reactivity, smoothing, etc.
-
-Outputs: animated pose tensor, video, info report.
+Outputs: animated pose tensor, video, creation info.
 
 📂 File Structure
-Model files: ComfyUI/models/dwpose/
+Model files:
+ComfyUI\models\dwpose\
 
 Dance library:
-
-Main: custom_nodes/BAIS1Cs_VACE_DANCE_SYNC_SUITE/dance_library/
-
-Fallback: ComfyUI/output/dance_library/
+custom_nodes\BAIS1Cs_VACE_DANCE_SYNC_SUITE\dance_library\
+(fallback: ComfyUI\output\dance_library\)
 
 Starter dances:
 
@@ -97,49 +100,62 @@ arms_up_body_sway.json
 
 hands_on_hips.json
 
-🔄 Example Workflows COMING SOON
-Professional Sync
-🎥 Source Video Loader → 2. 🎯 Pose Extractor → 3. 🎵 Music Control Net
+🔄 Example Workflows (COMING SOON)
+Professional Sync Pipeline
+Source Video Loader: Load video and extract BPM/metadata
+
+Pose Extractor: Extract pose tensors and save JSON
+
+Music Control Net: Load JSON and sync poses to any music, frame-perfect
 
 Creative Playground
-🎥 Source Video Loader → 2. 🕺 Simple Dance Poser
+Source Video Loader: Load ANALYSE Video
+
+Simple Dance Poser: Pick built-in or library style, tweak parameters, animate
 
 Library Building
-Use Pose Extractor to build JSON library from any source
+Extract dances from any video for reuse and re-sync
 
-Sync/re-mix with Music Control Net or Simple Dance Poser
+Build up your own JSON dance library over time
 
 🛠️ Technical Details
-Pose format: 128 points, normalized [0.0–1.0], JSON with metadata
+Pose format: 128 points, normalized (0.0–1.0), JSON with metadata
 
-BPM detection: librosa, validated, supports 45–220 BPM
+BPM detection: librosa-powered, 45–220 BPM range supported
 
-Sync: frame-perfect, beat-aligned, time-stretch; drift-resistant
+Sync: frame-perfect, beat-aligned, time-stretch (drift-resistant)
 
-Performance: CUDA-accelerated where available, efficient tensor logic
+Performance: CUDA-accelerated where available, efficient tensor code
 
-💡 Tips
-Use recommended resolutions for best results
+💡 Best Practices
+Use recommended resolutions (832×468 or 468×832)
 
-Prefer clear, full-body, well-lit videos
+Prefer clear, well-lit, full-body videos (minimize motion blur)
 
-For accurate BPM: use steady, high-quality music
+For accurate BPM, use clean music and clear audio tracks
 
-Always check output video for skeleton distortion (fix input aspect ratio if needed)
+Always review skeleton output for distortion (check video input ratio)
 
 🔧 Troubleshooting
-Missing models: Double-check model ONNX files are in ComfyUI/models/dwpose/
+Missing model error:
+Ensure both dw-ll_ucoco_384.onnx and yolox_l.onnx are in ComfyUI\models\dwpose\
 
-No dances saved: Check both library folders above
+Can't find dances:
+Check both library folders above for your saved JSONs
 
-Saving errors: Fix permissions on custom_nodes/BAIS1Cs_VACE_DANCE_SYNC_SUITE/
+Saving error:
+Verify you have write permission to the custom_nodes\BAIS1Cs_VACE_DANCE_SYNC_SUITE\ folder
 
-Distorted skeletons: Use only 832×468 or 468×832 inputs
+FFmpeg not found:
+Download FFmpeg, add its bin folder to your Windows PATH
+
+Distorted skeletons:
+Only use supported resolutions/aspect ratios
 
 📚 More Info
-Bundled docs and examples included
+See bundled documentation for advanced use or submit issues on GitHub.
 
-For bugs, open a GitHub issue
+For further help, tag @BAIS1C on Discord or open an issue.
 
-Enjoy next-level dance motion and music sync with BAIS1C’s VACE Dance Sync Suite.
+Enjoy rapid, pro-level dance animation and music sync with BAIS1C’s VACE Dance Sync Suite!
 
