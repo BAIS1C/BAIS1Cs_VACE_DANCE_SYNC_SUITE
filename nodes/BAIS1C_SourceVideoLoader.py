@@ -13,8 +13,8 @@ class BAIS1C_SourceVideoLoader:
 
     Loads video files and extracts comprehensive metadata including:
     - Video properties (FPS, frame count, duration)
-    - Enhanced BPM analysis with cross-validation (full audio duration)
-    - Prepared outputs for pose extraction and dance synchronization
+    - Enhanced BPM analysis (full audio duration)
+    - Outputs for pose extraction and dance synchronization
     """
 
     @classmethod
@@ -27,9 +27,9 @@ class BAIS1C_SourceVideoLoader:
 
     RETURN_TYPES = ("VIDEO", "AUDIO", "DICT", "STRING")
     RETURN_NAMES = (
-        "video_obj",    # Pass this to pose extractor or VACE
-        "audio_obj",    # {"waveform":..., "sample_rate":...} for dance sync nodes
-        "sync_meta",    # All meta info as a dict for downstream nodes
+        "video_obj",    # For pose extractor or downstream nodes
+        "audio_obj",    # {"waveform":..., "sample_rate":...}
+        "sync_meta",    # All meta info as a dict
         "ui_info",      # Info string for ComfyUI UI
     )
     FUNCTION = "load"
@@ -38,31 +38,24 @@ class BAIS1C_SourceVideoLoader:
     def load(self, video):
         """
         Load video and extract comprehensive metadata for dance sync pipeline.
-        Accepts ComfyUI video types, VideoFromFile, string path, or similar.
+        Accepts ComfyUI video types, VideoFromFile, string path, etc.
         """
         # --- Robust video path extraction ---
         video_path = None
         debug_info = []
 
-        # String path
         if isinstance(video, str):
             video_path = video
             debug_info.append("input is str")
-
-        # Known ComfyUI object conventions
         elif hasattr(video, "video_path"):
             video_path = getattr(video, "video_path")
             debug_info.append("input has .video_path")
-
         elif hasattr(video, "filename"):
             video_path = getattr(video, "filename")
             debug_info.append("input has .filename")
-
         elif hasattr(video, "path"):
             video_path = getattr(video, "path")
             debug_info.append("input has .path")
-
-        # __dict__ fallback for named fields
         elif hasattr(video, "__dict__"):
             if "video_path" in video.__dict__:
                 video_path = video.__dict__["video_path"]
@@ -73,6 +66,9 @@ class BAIS1C_SourceVideoLoader:
             elif "path" in video.__dict__:
                 video_path = video.__dict__["path"]
                 debug_info.append("input __dict__['path']")
+            elif "_VideoFromFile__file" in video.__dict__:
+                video_path = video.__dict__["_VideoFromFile__file"]
+                debug_info.append("input __dict__['_VideoFromFile__file']")
 
         if not video_path or not isinstance(video_path, str):
             print(f"[BAIS1C SourceVideoLoader] DEBUG: video input type {type(video)} dir={dir(video)} __dict__={getattr(video, '__dict__', None)}")
@@ -200,7 +196,7 @@ class BAIS1C_SourceVideoLoader:
 NODE_CLASS_MAPPINGS = {"BAIS1C_SourceVideoLoader": BAIS1C_SourceVideoLoader}
 NODE_DISPLAY_NAME_MAPPINGS = {"BAIS1C_SourceVideoLoader": "🎥 BAIS1C Source Video Loader"}
 
-# Optional: Self-test
+# Optional: Self-test (for direct script execution)
 def test_source_video_loader():
     """Test with a path string and dummy video-like objects."""
     class DummyVideo:
