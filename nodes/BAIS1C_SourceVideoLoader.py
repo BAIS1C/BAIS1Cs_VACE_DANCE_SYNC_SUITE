@@ -4,7 +4,7 @@ import numpy as np
 import traceback
 
 # Import your enhanced audio analyzer here
-from enhanced_audio_analysis import EnhancedAudioAnalyzer  # Update import path as needed
+from .enhanced_audio_analysis import EnhancedAudioAnalyzer  # Update import path as needed
 
 class BAIS1C_SourceVideoLoader:
     """
