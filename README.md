@@ -1,161 +1,254 @@
-🕺 BAIS1C VACE Dance Sync Suite (BETA STILL NEEDS FIXES)
-Professional ComfyUI toolkit for pose extraction, dance library management, and music-driven dance animation.
-Pipeline: video-to-pose extraction, library export, music-reactive dance generation, and frame-accurate BPM synchronization.
+# 🎭 BAIS1C VACE Dance Sync Suite
 
-🚀 Installation (Windows/ComfyUI)
-1. Clone or Download This Folder
+<div align="center">
 
-From your ComfyUI root, navigate to custom_nodes.
+**Modular ComfyUI Node Collection for Procedural, Audio-Reactive, and Filmmaking-Grade Pose & Dance Animation**
 
-Download or clone the suite into custom_nodes\BAIS1Cs_VACE_DANCE_SYNC_SUITE\.
+![GitHub stars](https://img.shields.io/github/stars/yourusername/bais1c-vace-dance-sync?style=social)
+![GitHub forks](https://img.shields.io/github/forks/yourusername/bais1c-vace-dance-sync?style=social)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Python](https://img.shields.io/badge/python-3.8+-blue.svg)
+![ComfyUI](https://img.shields.io/badge/ComfyUI-compatible-green.svg)
 
-2. Install Required Python Packages
+</div>
+
+---
+
+## 🚀 Features
+
+<table>
+<tr>
+<td width="50%">
+
+### 🎯 **Flexible Input System**
+- Pose extraction from video or sequential images
+- Fully audit-compliant processing
+- Batch processing support
 
-Open a terminal or Anaconda Prompt as Administrator.
+### 🤖 **DWPose Integration** 
+- State-of-the-art per-frame human pose estimation
+- 128-point full-body tracking
+- High accuracy pose detection
 
-Run:
+### 🔄 **Meta Consistency**
+- Unified `sync_meta` propagation
+- Robust dataflow throughout pipeline
+- Seamless node chaining
+
+</td>
+<td width="50%">
+
+### 🎵 **Audio/Music Reactivity**
+- Real-time music synchronization
+- BPM analysis and beat detection
+- Beat-driven movement modulation
+
+### 🧩 **Modular Architecture**
+- ComfyUI-style node design
+- Easy to extend and customize
+- Drop-in workflow integration
+
+### 💾 **Library Support**
+- Portable JSON pose sequences
+- Rich metadata preservation
+- Easy reuse and remixing
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🛠️ Node Collection
+
+| Node | Purpose | Key Features |
+|------|---------|-------------|
+| **🎬 BAIS1C_PoseExtractor** | Extracts pose from video/images | DWPose integration, batch processing |
+| **🎵 BAIS1C_MusicControlNet** | Music-driven pose modulation | Beat sync, BPM analysis |
+| **💃 BAIS1C_SimpleDancePoser** | Procedural dance generation | Parameterized sequences |
+| **🎭 BAIS1C_Suite_DancePoser** | Advanced music animation | Multi-bodypart EQ, complex sync |
+| **💾 BAIS1C_SavePoseJSON** | Pose library management | JSON export, metadata preservation |
+
+---
+
+## 📋 Requirements
+
+### Core Dependencies
+```bash
+pip install torch numpy librosa opencv-python onnxruntime decord
+```
+
+### System Requirements
+- **Python**: 3.8 or higher
+- **ComfyUI**: Latest version recommended
+- **GPU**: CUDA-compatible (recommended for performance)
+
+### Required Libraries
+| Library | Purpose | Version |
+|---------|---------|---------|
+| `torch` | PyTorch deep learning | Latest |
+| `numpy` | Numerical computing | Latest |
+| `librosa` | Audio analysis | Latest |
+| `opencv-python` | Computer vision | Latest |
+| `onnxruntime` | DWPose inference | Latest |
+| `decord` | Video processing | Latest |
 
-nginx
-Copy
-Edit
-pip install -r custom_nodes\BAIS1Cs_VACE_DANCE_SYNC_SUITE\requirements.txt
-3. Download Required DWPose Models
+---
 
-Download the following ONNX model files:
+## 🚀 Installation & Setup
 
-dw-ll_ucoco_384.onnx
+### 1. Clone Repository
+```bash
+cd /path/to/ComfyUI/custom_nodes/
+git clone https://github.com/yourusername/bais1c-vace-dance-sync.git
+```
+
+### 2. Install Dependencies
+```bash
+cd bais1c-vace-dance-sync
+pip install -r requirements.txt
+```
 
-yolox_l.onnx
+### 3. Download DWPose Models
+Place the following ONNX models in `models/dwpose/`:
+- `yolox_l.onnx`
+- `dw-ll_ucoco_384.onnx`
 
-Place both files in:
+### 4. Create Library Directory
+```bash
+mkdir dance_library
+```
+
+### 5. Restart ComfyUI
+The nodes will appear under **BAIS1C VACE Suite/** in the node browser.
 
-Copy
-Edit
-ComfyUI\models\dwpose\
-(Create this folder if it does not exist. You may use a different folder by setting the DWPose environment variable, but this is the default and recommended path.)
+---
 
-📋 Video & Pose Model Requirements
-Aspect ratios:
+## ⚡ Quick Start
 
-16:9 (landscape)
+### Basic Workflow
+```mermaid
+graph LR
+    A[📹 Video/Images] --> B[🎬 PoseExtractor]
+    B --> C[🎵 MusicControlNet]
+    C --> D[💃 DancePoser]
+    D --> E[💾 SavePoseJSON]
+    
+    F[🎶 Audio File] --> C
+    E --> G[📚 Dance Library]
+```
 
-9:16 (portrait)
+### Example Usage
+1. **Extract poses** from your source video or image sequence
+2. **Add music reactivity** to sync movements with audio
+3. **Generate or modify** dance sequences with procedural nodes
+4. **Save to library** for future use and remixing
+5. **Export** for VACE/WAN video generation
 
-Recommended resolutions:
+> 💡 **Pro Tip**: Always pass `sync_meta` through each node to retain context and settings!
 
-Landscape: 832×468
+---
 
-Portrait: 468×832
+## 🎬 What's Next: Cinematic Motion Libraries
 
-Important: Using other aspect ratios will distort skeletons and break pose accuracy.
+<details>
+<summary><strong>🎯 Roadmap Overview</strong></summary>
 
-🎭 Node Overview
-🎥 BAIS1C Source Video Loader
-Category: BAIS1C VACE Suite/Source
+### Phase 1: Motion Library Foundation
+- **Curated Action Catalog**: Running, jumping, combat, character idles
+- **Rich Metadata**: BPM, action types, loop settings, camera tags
+- **JSON Format**: Standardized, portable pose sequence storage
 
-Loads video, extracts audio, BPM, FPS, and metadata for the sync pipeline.
+### Phase 2: Film-Ready Tools
+- **Sequence Blending**: Smooth transitions between actions
+- **Tempo Control**: Adjust timing for dramatic pacing
+- **Shot Metadata**: Camera angles, timing, narrative tags
 
-Outputs: video object, audio object, fps, bpm, frame count, duration, sync_meta dictionary.
+### Phase 3: Cinematic Controls
+- **Style Transfer**: Apply emotional overlays (happy/sad/energetic)
+- **Camera Planning**: Automated camera movement suggestions
+- **Shot Scripting**: Timeline-based editing metaphor
 
-🎯 BAIS1C Pose Extractor (128pt)
-Category: BAIS1C VACE Suite/Extraction
+### Phase 4: VACE/WAN Integration
+- **Direct Pipeline**: Pose sequences → video generation
+- **Prompt Templating**: Automated scene description
+- **Batch Processing**: Generate multiple takes rapidly
 
-Extracts 128-point pose tensors from video using DWPose.
+### Phase 5: Community & Tools
+- **Library Contributions**: Community-driven pose collections
+- **Preview Tools**: Browser-based sequence visualization
+- **Remix Engine**: Combine and modify existing sequences
 
-Saves as JSON for reuse and library-building.
+</details>
 
-Format: 23 body, 68 face, 21 left hand, 16 right hand (all normalized).
+---
 
-Outputs: pose tensor (TENSOR), sync_meta (DICT).
+## 🤝 Contributing
 
-🎵 BAIS1C Music Control Net (Auto-Sync)
-Category: BAIS1C VACE Suite/Control
+We welcome contributions! Here's how you can help:
 
-Syncs pose libraries to any music source using professional BPM algorithms.
+### 🐛 Bug Reports
+Found an issue? [Open a GitHub Issue](https://github.com/yourusername/bais1c-vace-dance-sync/issues)
 
-Supports multiple sync/loop modes.
+### 💡 Feature Requests
+Have an idea? We'd love to hear it! Submit a feature request.
 
-Outputs: synced pose tensor, pose video (visualization), sync report.
+### 🔧 Code Contributions
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add amazing feature'`
+4. Push to branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
 
-🕺 BAIS1C Simple Dance Poser (Creative Playground)
-Category: BAIS1C VACE Suite/Creative
+### 📚 Library Contributions
+Help expand our motion library! See `/dance_library/README.md` for the pose JSON specification.
 
-Generate creative dance animations with user-tunable style, speed, and music response.
+---
 
-Outputs: animated pose tensor, video, creation info.
+## 📚 Documentation & Resources
 
-📂 File Structure
-Model files:
-ComfyUI\models\dwpose\
+### Official Documentation
+- [📖 Full Documentation](https://github.com/yourusername/bais1c-vace-dance-sync/wiki)
+- [🎯 API Reference](https://github.com/yourusername/bais1c-vace-dance-sync/blob/main/docs/api.md)
+- [🎬 Tutorial Videos](https://github.com/yourusername/bais1c-vace-dance-sync/blob/main/docs/tutorials.md)
 
-Dance library:
-custom_nodes\BAIS1Cs_VACE_DANCE_SYNC_SUITE\dance_library\
-(fallback: ComfyUI\output\dance_library\)
+### External Resources
+- [ComfyUI Documentation](https://github.com/comfyanonymous/ComfyUI)
+- [DWPose Paper & Models](https://github.com/IDEA-Research/DWPose)
+- [Librosa Audio Analysis](https://librosa.org/doc/latest/index.html)
+- [Decord Video Processing](https://github.com/dmlc/decord)
+- [WAN 2.1 Knowledge Base](https://notion.so)
 
-Starter dances:
+---
 
-basic_walking.json
+## 📄 License
 
-arms_up_body_sway.json
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-hands_on_hips.json
+---
 
-🔄 Example Workflows (COMING SOON)
-Professional Sync Pipeline
-Source Video Loader: Load video and extract BPM/metadata
+## 💬 Support & Community
 
-Pose Extractor: Extract pose tensors and save JSON
+<div align="center">
 
-Music Control Net: Load JSON and sync poses to any music, frame-perfect
+### Get Help
+[![Discord](https://img.shields.io/badge/Discord-Join%20Server-7289da.svg)](https://discord.gg/yourdiscord)
+[![GitHub Discussions](https://img.shields.io/badge/GitHub-Discussions-181717.svg)](https://github.com/yourusername/bais1c-vace-dance-sync/discussions)
 
-Creative Playground
-Source Video Loader: Load ANALYSE Video
+### Follow Updates
+[![Twitter](https://img.shields.io/badge/Twitter-@BAIS1C-1da1f2.svg)](https://twitter.com/BAIS1C)
+[![GitHub](https://img.shields.io/badge/GitHub-Follow-181717.svg)](https://github.com/BAIS1C)
 
-Simple Dance Poser: Pick built-in or library style, tweak parameters, animate
+</div>
 
-Library Building
-Extract dances from any video for reuse and re-sync
+---
 
-Build up your own JSON dance library over time
+<div align="center">
 
-🛠️ Technical Details
-Pose format: 128 points, normalized (0.0–1.0), JSON with metadata
+**Made with ❤️ by the BAIS1C Team**
 
-BPM detection: librosa-powered, 45–220 BPM range supported
+*Every saved action, pose, and animation is fully remixable and ready for AI filmmaking, VACE, or experimental video.*
 
-Sync: frame-perfect, beat-aligned, time-stretch (drift-resistant)
+⭐ **Star this repo if you found it helpful!** ⭐
 
-Performance: CUDA-accelerated where available, efficient tensor code
-
-💡 Best Practices
-Use recommended resolutions (832×468 or 468×832)
-
-Prefer clear, well-lit, full-body videos (minimize motion blur)
-
-For accurate BPM, use clean music and clear audio tracks
-
-Always review skeleton output for distortion (check video input ratio)
-
-🔧 Troubleshooting
-Missing model error:
-Ensure both dw-ll_ucoco_384.onnx and yolox_l.onnx are in ComfyUI\models\dwpose\
-
-Can't find dances:
-Check both library folders above for your saved JSONs
-
-Saving error:
-Verify you have write permission to the custom_nodes\BAIS1Cs_VACE_DANCE_SYNC_SUITE\ folder
-
-FFmpeg not found:
-Download FFmpeg, add its bin folder to your Windows PATH
-
-Distorted skeletons:
-Only use supported resolutions/aspect ratios
-
-📚 More Info
-See bundled documentation for advanced use or submit issues on GitHub.
-
-For further help, tag @BAIS1C on Discord or open an issue.
-
-Enjoy rapid, pro-level dance animation and music sync with BAIS1C’s VACE Dance Sync Suite!
-
+</div>
