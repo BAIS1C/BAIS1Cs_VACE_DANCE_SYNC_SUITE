@@ -23,7 +23,7 @@ class BAIS1C_PoseExtractor:
             "required": {
                 "source_type": (["video", "images"], {"default": "video"}),
                 "video_obj": ("VIDEO",),   # Used if source_type == "video"
-                "images": ("IMAGE",),      # Used if source_type == "images" (single image, list, or batch tensor)
+                "images": ("IMAGE", {"optional": True}), # Used if source_type == "images" (single image, list, or batch tensor)
                 "sync_meta": ("DICT",),    # sync_meta from loader
                 "title": ("STRING", {"default": "untitled_pose"}),
                 "fps": ("FLOAT", {"default": 24.0, "min": 1, "max": 60}),
