@@ -1,0 +1,738 @@
+{
+  "id": "cfe3f498-0e5f-4d1d-9700-49158aca7e38",
+  "revision": 0,
+  "last_node_id": 60,
+  "last_link_id": 171,
+  "nodes": [
+    {
+      "id": 17,
+      "type": "VHS_VideoCombine",
+      "pos": [
+        -3050.088134765625,
+        305.7729797363281
+      ],
+      "size": [
+        214.7587890625,
+        334
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 144
+        },
+        {
+          "name": "audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 155
+        },
+        {
+          "name": "meta_batch",
+          "shape": 7,
+          "type": "VHS_BatchManager",
+          "link": null
+        },
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Filenames",
+          "type": "VHS_FILENAMES",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-videohelpersuite",
+        "ver": "1.6.1",
+        "Node name for S&R": "VHS_VideoCombine",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": {
+        "frame_rate": 8,
+        "loop_count": 0,
+        "filename_prefix": "AnimateDiff",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 19,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": true,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "AnimateDiff_00176-audio.mp4",
+            "subfolder": "",
+            "type": "output",
+            "format": "video/h264-mp4",
+            "frame_rate": 30,
+            "workflow": "AnimateDiff_00176.png",
+            "fullpath": "C:\\Users\\craft\\comfyui-env\\ComfyUI\\output\\AnimateDiff_00176-audio.mp4"
+          }
+        }
+      }
+    },
+    {
+      "id": 34,
+      "type": "easy showAnything",
+      "pos": [
+        -4354.5126953125,
+        855.4837036132812
+      ],
+      "size": [
+        411.1089782714844,
+        164.1816864013672
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 156
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-easy-use",
+        "ver": "1.3.1",
+        "Node name for S&R": "easy showAnything",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "{\"title\": \"untitled_pose_from_vhs\", \"author\": \"\", \"style\": \"\", \"fps\": 30.0, \"original_frame_count\": 449, \"input_batch_frames\": 449, \"processed_frames\": 449, \"duration\": 14.966666666666667, \"original_duration\": 14.966666666666667, \"width\": 480, \"height\": 832, \"aspect_ratio\": 0.5769230769230769, \"bpm\": 120.0, \"sample_stride\": 1, \"pose_extraction_success\": true, \"failed_detections\": 0, \"extraction_settings\": {\"pose_format\": \"128-point\", \"dwpose_version\": \"Enhanced\", \"input_type\": \"VHS_IMAGE_TENSOR\", \"visualization_added\": true, \"pose_visibility\": 1.0}}"
+      ]
+    },
+    {
+      "id": 50,
+      "type": "BAIS1C_MusicControlNet",
+      "pos": [
+        -4368.45263671875,
+        287.5225524902344
+      ],
+      "size": [
+        365.7564392089844,
+        338
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 170
+        },
+        {
+          "name": "input_pose_tensor",
+          "shape": 7,
+          "type": "POSE",
+          "link": 152
+        }
+      ],
+      "outputs": [
+        {
+          "name": "synced_pose_tensor",
+          "type": "POSE",
+          "links": [
+            169
+          ]
+        },
+        {
+          "name": "pose_video",
+          "type": "IMAGE",
+          "links": [
+            144
+          ]
+        },
+        {
+          "name": "sync_report",
+          "type": "STRING",
+          "links": [
+            168
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "craftogrammer/BAIS1Cs_VACE_DANCE_SYNC_SUITE",
+        "ver": "9b0f9655f25c737f2b68dd7072ed4a4074cde3f0",
+        "Node name for S&R": "BAIS1C_MusicControlNet",
+        "widget_ue_connectable": {
+          "target_fps": true
+        }
+      },
+      "widgets_values": [
+        24,
+        "direct_tensor",
+        "arms_up_body_sway",
+        "beat_aligned",
+        "loop_to_fit",
+        true,
+        "dots",
+        true,
+        "auto_synced",
+        0.1,
+        true
+      ]
+    },
+    {
+      "id": 51,
+      "type": "BAIS1C_PoseExtractor",
+      "pos": [
+        -5318.93310546875,
+        352.6180419921875
+      ],
+      "size": [
+        344.7837829589844,
+        358
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_obj",
+          "type": "VIDEO",
+          "link": 165
+        },
+        {
+          "name": "sync_meta",
+          "type": "DICT",
+          "link": 163
+        },
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 166
+        }
+      ],
+      "outputs": [
+        {
+          "name": "pose_tensor",
+          "type": "TENSOR",
+          "links": [
+            152,
+            156
+          ]
+        },
+        {
+          "name": "sync_meta",
+          "type": "DICT",
+          "links": [
+            162
+          ]
+        },
+        {
+          "name": "processed_images",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "audio_passthrough",
+          "type": "AUDIO",
+          "links": [
+            155
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "craftogrammer/BAIS1Cs_VACE_DANCE_SYNC_SUITE",
+        "ver": "9b0f9655f25c737f2b68dd7072ed4a4074cde3f0",
+        "Node name for S&R": "BAIS1C_PoseExtractor",
+        "widget_ue_connectable": {
+          "fps": true,
+          "frame_count": true,
+          "duration": true,
+          "width": true,
+          "height": true
+        }
+      },
+      "widgets_values": [
+        24,
+        1
+      ]
+    },
+    {
+      "id": 53,
+      "type": "LoadVideo",
+      "pos": [
+        -6662.0361328125,
+        350.3844299316406
+      ],
+      "size": [
+        274.080078125,
+        561.2534790039062
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VIDEO",
+          "type": "VIDEO",
+          "links": [
+            164
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.43",
+        "widget_ue_connectable": {},
+        "Node name for S&R": "LoadVideo"
+      },
+      "widgets_values": [
+        "MFK SOURCE (2072).mp4",
+        "image"
+      ]
+    },
+    {
+      "id": 54,
+      "type": "easy showAnything",
+      "pos": [
+        -5438.4423828125,
+        820.5958251953125
+      ],
+      "size": [
+        411.1089782714844,
+        164.1816864013672
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 162
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-easy-use",
+        "ver": "1.3.1",
+        "widget_ue_connectable": {},
+        "Node name for S&R": "easy showAnything"
+      },
+      "widgets_values": [
+        "{\"title\": \"untitled_pose_from_vhs\", \"author\": \"\", \"style\": \"\", \"fps\": 30.0, \"original_frame_count\": 449, \"input_batch_frames\": 449, \"processed_frames\": 449, \"duration\": 14.966666666666667, \"original_duration\": 14.966666666666667, \"width\": 480, \"height\": 832, \"aspect_ratio\": 0.5769230769230769, \"bpm\": 120.0, \"sample_stride\": 1, \"pose_extraction_success\": true, \"failed_detections\": 0, \"extraction_settings\": {\"pose_format\": \"128-point\", \"dwpose_version\": \"Enhanced\", \"input_type\": \"VHS_IMAGE_TENSOR\", \"visualization_added\": true, \"pose_visibility\": 1.0}}"
+      ]
+    },
+    {
+      "id": 55,
+      "type": "BAIS1C_SourceVideoLoader",
+      "pos": [
+        -6174.7841796875,
+        348.0478515625
+      ],
+      "size": [
+        247.98593139648438,
+        86
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 164
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video_obj",
+          "type": "VIDEO",
+          "links": [
+            165
+          ]
+        },
+        {
+          "name": "audio_obj",
+          "type": "AUDIO",
+          "links": [
+            166
+          ]
+        },
+        {
+          "name": "sync_meta",
+          "type": "DICT",
+          "links": [
+            163
+          ]
+        },
+        {
+          "name": "ui_info",
+          "type": "STRING",
+          "links": [
+            167
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "BAIS1C/BAIS1Cs_VACE_DANCE_SYNC_SUITE",
+        "ver": "afefe790ba100af005bf0744d5e72a35521878e7",
+        "widget_ue_connectable": {},
+        "Node name for S&R": "BAIS1C_SourceVideoLoader"
+      }
+    },
+    {
+      "id": 56,
+      "type": "easy showAnything",
+      "pos": [
+        -6103.73779296875,
+        715.2091064453125
+      ],
+      "size": [
+        411.1089782714844,
+        164.1816864013672
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 167
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-easy-use",
+        "ver": "1.3.1",
+        "widget_ue_connectable": {},
+        "Node name for S&R": "easy showAnything"
+      },
+      "widgets_values": [
+        "{\"title\": \"untitled_pose_from_vhs\", \"author\": \"\", \"style\": \"\", \"fps\": 30.0, \"original_frame_count\": 449, \"input_batch_frames\": 449, \"processed_frames\": 449, \"duration\": 14.966666666666667, \"original_duration\": 14.966666666666667, \"width\": 480, \"height\": 832, \"aspect_ratio\": 0.5769230769230769, \"bpm\": 120.0, \"sample_stride\": 1, \"pose_extraction_success\": true, \"failed_detections\": 0, \"extraction_settings\": {\"pose_format\": \"128-point\", \"dwpose_version\": \"Enhanced\", \"input_type\": \"VHS_IMAGE_TENSOR\", \"visualization_added\": true, \"pose_visibility\": 1.0}}"
+      ]
+    },
+    {
+      "id": 57,
+      "type": "easy showAnything",
+      "pos": [
+        -3748.798828125,
+        641.6625366210938
+      ],
+      "size": [
+        411.1089782714844,
+        164.1816864013672
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 168
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-easy-use",
+        "ver": "1.3.1",
+        "widget_ue_connectable": {},
+        "Node name for S&R": "easy showAnything"
+      },
+      "widgets_values": [
+        "{\"title\": \"untitled_pose_from_vhs\", \"author\": \"\", \"style\": \"\", \"fps\": 30.0, \"original_frame_count\": 449, \"input_batch_frames\": 449, \"processed_frames\": 449, \"duration\": 14.966666666666667, \"original_duration\": 14.966666666666667, \"width\": 480, \"height\": 832, \"aspect_ratio\": 0.5769230769230769, \"bpm\": 120.0, \"sample_stride\": 1, \"pose_extraction_success\": true, \"failed_detections\": 0, \"extraction_settings\": {\"pose_format\": \"128-point\", \"dwpose_version\": \"Enhanced\", \"input_type\": \"VHS_IMAGE_TENSOR\", \"visualization_added\": true, \"pose_visibility\": 1.0}}"
+      ]
+    },
+    {
+      "id": 58,
+      "type": "easy showAnything",
+      "pos": [
+        -3787.005615234375,
+        -0.043401628732681274
+      ],
+      "size": [
+        411.1089782714844,
+        164.1816864013672
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 169
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-easy-use",
+        "ver": "1.3.1",
+        "widget_ue_connectable": {},
+        "Node name for S&R": "easy showAnything"
+      },
+      "widgets_values": [
+        "{\"title\": \"untitled_pose_from_vhs\", \"author\": \"\", \"style\": \"\", \"fps\": 30.0, \"original_frame_count\": 449, \"input_batch_frames\": 449, \"processed_frames\": 449, \"duration\": 14.966666666666667, \"original_duration\": 14.966666666666667, \"width\": 480, \"height\": 832, \"aspect_ratio\": 0.5769230769230769, \"bpm\": 120.0, \"sample_stride\": 1, \"pose_extraction_success\": true, \"failed_detections\": 0, \"extraction_settings\": {\"pose_format\": \"128-point\", \"dwpose_version\": \"Enhanced\", \"input_type\": \"VHS_IMAGE_TENSOR\", \"visualization_added\": true, \"pose_visibility\": 1.0}}"
+      ]
+    },
+    {
+      "id": 59,
+      "type": "SoundFlow_TrimAudio",
+      "pos": [
+        -4834.49267578125,
+        126.85619354248047
+      ],
+      "size": [
+        270,
+        82
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 171
+        }
+      ],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            170
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "soundflow",
+        "ver": "9cb3775172417ce328b88036178dc2fc8a07dbb4",
+        "widget_ue_connectable": {},
+        "Node name for S&R": "SoundFlow_TrimAudio"
+      },
+      "widgets_values": [
+        0,
+        -1
+      ]
+    },
+    {
+      "id": 60,
+      "type": "LoadAudio",
+      "pos": [
+        -5379.45556640625,
+        -103.11469268798828
+      ],
+      "size": [
+        274.080078125,
+        136
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            171
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.43",
+        "widget_ue_connectable": {},
+        "Node name for S&R": "LoadAudio"
+      },
+      "widgets_values": [
+        "10 second test.wav",
+        null,
+        ""
+      ]
+    }
+  ],
+  "links": [
+    [
+      144,
+      50,
+      1,
+      17,
+      0,
+      "IMAGE"
+    ],
+    [
+      152,
+      51,
+      0,
+      50,
+      1,
+      "POSE"
+    ],
+    [
+      155,
+      51,
+      3,
+      17,
+      1,
+      "AUDIO"
+    ],
+    [
+      156,
+      51,
+      0,
+      34,
+      0,
+      "*"
+    ],
+    [
+      162,
+      51,
+      1,
+      54,
+      0,
+      "*"
+    ],
+    [
+      163,
+      55,
+      2,
+      51,
+      1,
+      "DICT"
+    ],
+    [
+      164,
+      53,
+      0,
+      55,
+      0,
+      "VIDEO"
+    ],
+    [
+      165,
+      55,
+      0,
+      51,
+      0,
+      "VIDEO"
+    ],
+    [
+      166,
+      55,
+      1,
+      51,
+      3,
+      "AUDIO"
+    ],
+    [
+      167,
+      55,
+      3,
+      56,
+      0,
+      "*"
+    ],
+    [
+      168,
+      50,
+      2,
+      57,
+      0,
+      "*"
+    ],
+    [
+      169,
+      50,
+      0,
+      58,
+      0,
+      "*"
+    ],
+    [
+      170,
+      59,
+      0,
+      50,
+      0,
+      "AUDIO"
+    ],
+    [
+      171,
+      60,
+      0,
+      59,
+      0,
+      "AUDIO"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8769226950000015,
+      "offset": [
+        5773.323983980257,
+        -83.87341013777781
+      ]
+    },
+    "frontendVersion": "1.23.4",
+    "ue_links": [],
+    "links_added_by_ue": [],
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}
