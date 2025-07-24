@@ -13,7 +13,7 @@ class BAIS1C_SourceVideoLoader:
 
     Loads video files and extracts comprehensive metadata including:
     - Video properties (FPS, frame count, duration)
-    - Enhanced BPM analysis (full audio duration)
+    - Enhanced BPM analysis (full audio duration, robust against false high values)
     - Outputs for pose extraction and dance synchronization
     """
 
@@ -175,30 +175,29 @@ class BAIS1C_SourceVideoLoader:
         return shutil.which('ffmpeg') is not None
 
     def _analyze_bpm_enhanced(self, waveform, sample_rate, duration):
-    print(f"[BAIS1C VACE Suite] Analyzing BPM from {duration:.1f}s of audio...")
-    try:
-        # Get all tempo estimates
-        tempo_estimates = librosa.beat.tempo(
-            y=waveform,
-            sr=sample_rate,
-            aggregate=None,
-            start_bpm=60,
-            std_bpm=40
-        )
-        # Filter plausible "song" BPMs (real-world music)
-        plausible_bpms = [b for b in tempo_estimates if 70 <= b <= 160]
-        if plausible_bpms:
-            primary_bpm = float(min(plausible_bpms))
-        else:
-            primary_bpm = float(np.median(tempo_estimates)) if len(tempo_estimates) > 0 else 120.0
-        # Halve anything above 150 BPM, recursively (catches quadruple tempo)
-        while primary_bpm > 150:
-            primary_bpm /= 2.0
-        return np.clip(primary_bpm, 60, 150)
-    except Exception as e:
-        print(f"[BAIS1C VACE Suite] BPM analysis failed: {e}, using default 120.0")
-        return 120.0
-
+        print(f"[BAIS1C VACE Suite] Analyzing BPM from {duration:.1f}s of audio...")
+        try:
+            # Get all tempo estimates
+            tempo_estimates = librosa.beat.tempo(
+                y=waveform,
+                sr=sample_rate,
+                aggregate=None,
+                start_bpm=60,
+                std_bpm=40
+            )
+            # Filter plausible "song" BPMs (real-world music)
+            plausible_bpms = [b for b in tempo_estimates if 70 <= b <= 160]
+            if plausible_bpms:
+                primary_bpm = float(min(plausible_bpms))
+            else:
+                primary_bpm = float(np.median(tempo_estimates)) if len(tempo_estimates) > 0 else 120.0
+            # Halve anything above 150 BPM, recursively (catches quadruple tempo)
+            while primary_bpm > 150:
+                primary_bpm /= 2.0
+            return np.clip(primary_bpm, 60, 150)
+        except Exception as e:
+            print(f"[BAIS1C VACE Suite] BPM analysis failed: {e}, using default 120.0")
+            return 120.0
 
 # Node registration
 NODE_CLASS_MAPPINGS = {"BAIS1C_SourceVideoLoader": BAIS1C_SourceVideoLoader}
