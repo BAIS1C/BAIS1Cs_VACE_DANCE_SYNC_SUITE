@@ -3,8 +3,8 @@
 import numpy as np
 import traceback
 
-# Import your enhanced audio analyzer here
-from .enhanced_audio_analysis import EnhancedAudioAnalyzer  # Update import path as needed
+# Correct import for bundled helper in nodes/ dir
+from .enhanced_audio_analysis import EnhancedAudioAnalyzer
 
 class BAIS1C_SourceVideoLoader:
     """
@@ -19,7 +19,7 @@ class BAIS1C_SourceVideoLoader:
             "required": {
                 "images": ("IMAGE",),          # Frame sequence from VHS_LoadVideo or similar
                 "audio": ("AUDIO",),           # Optional, but required for BPM/etc
-                "video_info": ("DICT",)        # Metadata dict from upstream node
+                "video_info": ("DICT",)        # Metadata dict from upstream node (VHS/VideoHelper/etc)
             }
         }
 
@@ -48,7 +48,7 @@ class BAIS1C_SourceVideoLoader:
     def execute(self, images, audio, video_info):
         # Defensive copy to avoid mutating input dict
         sync_meta = dict(video_info) if video_info else {}
-        target_fps = sync_meta.get("fps", 24.0)
+        target_fps = float(sync_meta.get("fps", 24.0))
         audio_analysis = None
         # Only analyze if audio is present
         if audio and audio.get("waveform") is not None and audio.get("sample_rate") is not None:
@@ -61,7 +61,7 @@ class BAIS1C_SourceVideoLoader:
         else:
             sync_meta["audio_analysis_performed"] = False
 
-        # Clean UI string for panel/debug
+        # UI info for ComfyUI summary panel/debug
         lines = []
         if audio_analysis:
             lines.append(f"BPM: {audio_analysis.get('primary_bpm', 0):.2f} (Conf: {audio_analysis.get('bpm_confidence', 0):.2f})")
@@ -82,8 +82,7 @@ class BAIS1C_SourceVideoLoader:
 
         return (images, audio, sync_meta, ui_info)
 
-
-# ComfyUI Node registration block (add to your nodes/__init__.py if needed)
+# ComfyUI Node registration block
 NODE_CLASS_MAPPINGS = {
     "BAIS1C_SourceVideoLoader": BAIS1C_SourceVideoLoader,
 }
@@ -91,10 +90,9 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BAIS1C_SourceVideoLoader": "BAIS1C Source Video Loader (BPM/Meta)",
 }
 
-
-# Inline test function (sanity check)
+# Inline test function (for standalone/CLI dev testing)
 if __name__ == "__main__":
-    # Fake test data (minimal test, expand as needed)
+    # Test with minimal dummy data
     sr = 44100
     test_waveform = np.sin(2 * np.pi * 2 * np.linspace(0, 1, sr))
     test_audio = {"waveform": test_waveform, "sample_rate": sr}
@@ -103,4 +101,3 @@ if __name__ == "__main__":
     node = BAIS1C_SourceVideoLoader()
     out = node.execute(test_images, test_audio, test_meta)
     print("[TEST OUTPUT]", out[2])  # Print sync_meta
-
