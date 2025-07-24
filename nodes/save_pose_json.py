@@ -7,7 +7,7 @@ class BAIS1C_SavePoseJSON:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "pose_tensor": ("TENSOR",),
+                "pose_tensor": ("POSE",),
                 "sync_meta": ("DICT",),  # <-- Always sync_meta!
                 "filename":  ("STRING", {"default": "my_dance"}),
             }

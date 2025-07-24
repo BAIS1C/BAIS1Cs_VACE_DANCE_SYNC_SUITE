@@ -16,12 +16,12 @@ class BAIS1C_PoseCheckpoint:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "pose_tensor": ("TENSOR",),      # 128-point tensor
+                "pose_tensor": ("POSE",),      # 128-point tensor
                 "meta": ("DICT",),               # full meta dict
             }
         }
 
-    RETURN_TYPES = ("TENSOR", "DICT")
+    RETURN_TYPES = ("POSE", "DICT")
     RETURN_NAMES = ("pose_tensor", "meta")
     FUNCTION = "checkpoint"
     CATEGORY = "BAIS1C VACE Suite/Pose"

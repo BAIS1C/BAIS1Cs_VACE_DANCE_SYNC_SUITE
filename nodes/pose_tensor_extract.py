@@ -32,7 +32,7 @@ class BAIS1C_PoseExtractor:
             }
         }
 
-    RETURN_TYPES  = ("TENSOR", "DICT")
+    RETURN_TYPES  = ("POSE", "DICT")
     RETURN_NAMES  = ("pose_tensor", "sync_meta")
     FUNCTION      = "extract"
     CATEGORY      = "BAIS1C VACE Suite/Pose"
