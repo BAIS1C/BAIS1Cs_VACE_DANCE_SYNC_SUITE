@@ -1,12 +1,17 @@
+# File: pose_tensor_extract.py
+# BAIS1C VACE Dance Sync Suite – Pose Extractor (streamlined)
+
 import os
-import json
 import numpy as np
 import torch
 import decord
 
 class BAIS1C_PoseExtractor:
     """
-    BAIS1C VACE Dance Sync Suite - Pose Extractor (Streamlined)
+    BAIS1C VACE Dance Sync Suite – Pose Extractor (128-point)
+    Receives a VIDEO and the sync_meta dict from Source Video Loader,
+    extracts a 128-point pose tensor, and immediately passes both
+    tensor and sync_meta downstream.  No persistence logic here.
     """
 
     @classmethod
@@ -14,74 +19,70 @@ class BAIS1C_PoseExtractor:
         return {
             "required": {
                 "video_obj": ("VIDEO",),
-                "meta": ("DICT",),         # Accepts the meta dict output by loader node
-                "title": ("STRING", {"default": "untitled_pose"}),
-                "save_to_library": ("BOOLEAN", {"default": False}),
-                "debug": ("BOOLEAN", {"default": False}),
+                "sync_meta": ("DICT",),      # sync_meta from Source Video Loader
+                "title":    ("STRING", {"default": "untitled_pose"}),
+                "debug":    ("BOOLEAN", {"default": False}),
             }
         }
 
-    RETURN_TYPES = ("TENSOR", "DICT")
-    RETURN_NAMES = (
-        "pose_tensor",
-        "meta",
-    )
-    FUNCTION = "process"
-    CATEGORY = "BAIS1C VACE Suite/Pose"
+    RETURN_TYPES  = ("TENSOR", "DICT")
+    RETURN_NAMES  = ("pose_tensor", "sync_meta")
+    FUNCTION      = "extract"
+    CATEGORY      = "BAIS1C VACE Suite/Pose"
+    OUTPUT_NODE   = False
 
-    def process(self, video_obj, meta, title, save_to_library, debug):
-        # Extract info from meta dict (all fields provided by loader node)
-        video_path = meta.get("video_path", None) or (video_obj.video_path if hasattr(video_obj, "video_path") else video_obj)
-        video_fps = float(meta.get("fps", 24))
-        sample_stride = int(meta.get("sample_stride", 1))
+    def extract(self, video_obj, sync_meta, title, debug):
+        # ------------------------------------------------------------------
+        # 1. Resolve video path
+        # ------------------------------------------------------------------
+        video_path = (
+            sync_meta.get("video_path")
+            or (video_obj.video_path if hasattr(video_obj, "video_path") else str(video_obj))
+        )
+        if not os.path.isfile(video_path):
+            raise FileNotFoundError(f"Video file not found: {video_path}")
 
-        # Video properties
-        vr = decord.VideoReader(video_path, ctx=decord.cpu(0))
+        # ------------------------------------------------------------------
+        # 2. Video properties
+        # ------------------------------------------------------------------
+        vr           = decord.VideoReader(video_path, ctx=decord.cpu(0))
         total_frames = len(vr)
+        video_fps    = float(sync_meta.get("fps", vr.get_avg_fps()))
 
-        # Adjust stride based on FPS for consistent temporal sampling
+        # Consistent temporal sampling (optional stride tweak)
+        sample_stride = int(sync_meta.get("sample_stride", 1))
         adjusted_stride = max(1, sample_stride * max(1, int(video_fps / 24)))
         frame_indices = list(range(0, total_frames, adjusted_stride))
 
-        # Dummy pose extraction (for demo/testing)
-        pose_tensor = []
+        if debug:
+            print(f"[BAIS1C PoseExtractor] {len(frame_indices)} frames selected "
+                  f"(stride {adjusted_stride}) from {total_frames} total.")
+
+        # ------------------------------------------------------------------
+        # 3. Dummy 128-point pose extraction (replace with real model)
+        # ------------------------------------------------------------------
+        pose_list = []
         for idx in frame_indices:
-            pose = np.zeros((128, 3), dtype=np.float32)
-            pose_tensor.append(pose)
+            pose = np.zeros((128, 3), dtype=np.float32)  # (x, y, confidence)
+            pose_list.append(pose)
 
-        pose_tensor = np.stack(pose_tensor)
-        torch_pose_tensor = torch.from_numpy(pose_tensor)
+        pose_tensor = torch.from_numpy(np.stack(pose_list))
 
-        # Update meta for outputs
-        meta_out = dict(meta)
-        meta_out.update({
-            "title": title,
-            "adjusted_stride": adjusted_stride,
+        # ------------------------------------------------------------------
+        # 4. Augment sync_meta for downstream nodes
+        # ------------------------------------------------------------------
+        sync_meta_out = dict(sync_meta)
+        sync_meta_out.update({
+            "title":            title,
+            "adjusted_stride":  adjusted_stride,
             "processed_frames": len(frame_indices),
         })
 
-        # Save to library if toggled
-        if save_to_library:
-            library_dir = self._find_dance_library_directory()
-            os.makedirs(library_dir, exist_ok=True)
-            safe_title = "".join([c if c.isalnum() or c in (' ', '_', '-') else '_' for c in title]).strip()
-            filename = os.path.join(library_dir, f"{safe_title or 'untitled_pose'}.json")
-            export = {
-                "title": meta_out["title"],
-                "meta": meta_out,
-                "tensor": pose_tensor.tolist(),
-            }
-            with open(filename, "w") as f:
-                json.dump(export, f, indent=2)
-            if debug:
-                print(f"[BAIS1C] Saved pose to {filename}")
+        return (pose_tensor, sync_meta_out)
 
-        return (torch_pose_tensor, meta_out)
 
-    def _find_dance_library_directory(self):
-        suite_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        library_dir = os.path.join(suite_root, "dance_library")
-        return library_dir
-
-NODE_CLASS_MAPPINGS = {"BAIS1C_PoseExtractor": BAIS1C_PoseExtractor}
+# --------------------------------------------------------------------------
+# Node registration
+# --------------------------------------------------------------------------
+NODE_CLASS_MAPPINGS        = {"BAIS1C_PoseExtractor": BAIS1C_PoseExtractor}
 NODE_DISPLAY_NAME_MAPPINGS = {"BAIS1C_PoseExtractor": "🎯 BAIS1C Pose Extractor (128pt)"}

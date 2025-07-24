@@ -35,16 +35,17 @@ class BAIS1C_SourceVideoLoader:
         """
         Load video, extract audio, analyze for BPM and metadata, output all.
         """
-        # Get path from video object or string
+        # ------------------------------------------------------------------
+        # 1. Resolve video path
+        # ------------------------------------------------------------------
         if hasattr(video, "video_path"):
             video_path = video.video_path
+        elif hasattr(video, "path"):           # NEW: VideoFromFile wrapper
+            video_path = video.path
         elif isinstance(video, str):
             video_path = video
         else:
             raise ValueError(f"Unsupported video input type: {type(video)}.")
-
-        if not os.path.exists(video_path):
-            raise FileNotFoundError(f"Video file not found: {video_path}")
 
         # Video properties
         vr = decord.VideoReader(video_path, ctx=decord.cpu(0))
