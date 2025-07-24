@@ -22,9 +22,12 @@ class BAIS1C_PoseExtractor:
         return {
             "required": {
                 "source_type": (["video", "images"], {"default": "video"}),
-                "video_obj": ("VIDEO",),   # Used if source_type == "video"
-                "images": ("IMAGE", {"optional": True}), # Used if source_type == "images" (single image, list, or batch tensor)
-                "sync_meta": ("DICT",),    # sync_meta from loader
+                "video_obj": ("VIDEO", {"visible_if": {"source_type": "video"}}),   # Only visible in video mode
+                "images": ("IMAGE", {
+                    "optional": True,
+                    "visible_if": {"source_type": "images"}
+                }), # Only visible in images mode
+                "sync_meta": ("DICT",),
                 "title": ("STRING", {"default": "untitled_pose"}),
                 "fps": ("FLOAT", {"default": 24.0, "min": 1, "max": 60}),
                 "temporal_smoothing": ("FLOAT", {"default": 0.1, "min": 0.0, "max": 1.0, "step": 0.05}),
