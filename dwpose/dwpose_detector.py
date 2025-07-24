@@ -69,6 +69,10 @@ def create_dwpose_detector():
     # Set the default path to comfyui\models\dwpose relative to this file.
     DEFAULT_DWPOSE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "models", "dwpose"))
     dwpose_dir = os.environ.get("dwpose", DEFAULT_DWPOSE_PATH)
+    # Debug print here:
+    print("DEBUG - DWPose checking for models at:", dwpose_dir)
+    print("DEBUG - yolox_l.onnx:", os.path.exists(os.path.join(dwpose_dir, "yolox_l.onnx")))
+    print("DEBUG - dw-ll_ucoco_384.onnx:", os.path.exists(os.path.join(dwpose_dir, "dw-ll_ucoco_384.onnx")))
     
     model_det_path = os.path.join(dwpose_dir, "yolox_l.onnx")
     model_pose_path = os.path.join(dwpose_dir, "dw-ll_ucoco_384.onnx")

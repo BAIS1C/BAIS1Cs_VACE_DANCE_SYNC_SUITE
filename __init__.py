@@ -29,7 +29,7 @@ try:
     
     # Check for required directories
     dance_library_dir = os.path.join(suite_dir, "dance_library")
-    dwpose_dir = os.path.join(suite_dir, "dwpose")
+    dwpose_models_dir = os.path.abspath(os.path.join(suite_dir, "..","..", "models", "dwpose"))
     
     if os.path.exists(dance_library_dir):
         json_count = len([f for f in os.listdir(dance_library_dir) if f.endswith('.json')])
@@ -37,15 +37,16 @@ try:
     else:
         print(f"[BAIS1C VACE Suite] ⚠️ Dance library directory not found: {dance_library_dir}")
     
-    if os.path.exists(dwpose_dir):
-        onnx_files = [f for f in os.listdir(dwpose_dir) if f.endswith('.onnx')]
+    # Fixed DWPose check to match the working detector path
+    if os.path.exists(dwpose_models_dir):
+        onnx_files = [f for f in os.listdir(dwpose_models_dir) if f.endswith('.onnx')]
         if len(onnx_files) >= 2:
             print(f"[BAIS1C VACE Suite] ✅ DWPose models found: {len(onnx_files)} ONNX files")
         else:
             print(f"[BAIS1C VACE Suite] ⚠️ DWPose models incomplete: {len(onnx_files)}/2 ONNX files")
             print(f"[BAIS1C VACE Suite] Required: yolox_l.onnx, dw-ll_ucoco_384.onnx")
     else:
-        print(f"[BAIS1C VACE Suite] ⚠️ DWPose directory not found: {dwpose_dir}")
+        print(f"[BAIS1C VACE Suite] ⚠️ DWPose directory not found: {dwpose_models_dir}")
     
     # Export for ComfyUI
     __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
