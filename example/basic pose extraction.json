@@ -1,15 +1,15 @@
 {
-  "id": "d4947982-199f-4ed1-800a-76a5c140629c",
+  "id": "bb0d736e-fe06-4162-aa4d-7a5223ef5254",
   "revision": 0,
   "last_node_id": 85,
-  "last_link_id": 259,
+  "last_link_id": 262,
   "nodes": [
     {
       "id": 56,
       "type": "easy showAnything",
       "pos": [
-        -6697.71875,
-        -141.91207885742188
+        -7117.4453125,
+        55.40300750732422
       ],
       "size": [
         337.54852294921875,
@@ -40,19 +40,19 @@
         "widget_ue_connectable": {}
       },
       "widgets_values": [
-        "📺 Video: 121 frames @ 24.0 FPS\n⏱️  Duration: 0.00s\n🦴 Skeleton: UCoco23 (23-point, DWPose only)\n🔇 BPM unavailable or confidence too low. No beat-based sync possible."
+        "📺 Video: 161 frames @ 24.0 FPS\n⏱️  Duration: 0.00s\n🦴 Skeleton: UCoco23 (23-point, DWPose only)\n🔇 BPM unavailable or confidence too low. No beat-based sync possible."
       ]
     },
     {
       "id": 64,
       "type": "VHS_VideoCombine",
       "pos": [
-        -4810.798828125,
-        -450.5651550292969
+        -4793.9853515625,
+        -504.8078308105469
       ],
       "size": [
-        228.58114624023438,
-        725.2598266601562
+        379.16363525390625,
+        997.61767578125
       ],
       "flags": {},
       "order": 8,
@@ -96,7 +96,7 @@
         "widget_ue_connectable": {}
       },
       "widgets_values": {
-        "frame_rate": 8,
+        "frame_rate": 24,
         "loop_count": 0,
         "filename_prefix": "BAIS1CS SYNC",
         "format": "video/nvenc_h264-mp4",
@@ -110,13 +110,13 @@
           "hidden": false,
           "paused": false,
           "params": {
-            "filename": "BAIS1CS SYNC_00006-audio.mp4",
+            "filename": "BAIS1CS SYNC_00020-audio.mp4",
             "subfolder": "",
             "type": "output",
             "format": "video/nvenc_h264-mp4",
-            "frame_rate": 8,
-            "workflow": "BAIS1CS SYNC_00006.png",
-            "fullpath": "F:\\ComfyUI\\output\\BAIS1CS SYNC_00006-audio.mp4"
+            "frame_rate": 24,
+            "workflow": "BAIS1CS SYNC_00020.png",
+            "fullpath": "F:\\ComfyUI\\output\\BAIS1CS SYNC_00020-audio.mp4"
           }
         }
       }
@@ -154,7 +154,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            226
+            261
           ]
         },
         {
@@ -189,10 +189,10 @@
         "force_rate": 24,
         "custom_width": 0,
         "custom_height": 0,
-        "frame_load_cap": 121,
+        "frame_load_cap": 161,
         "skip_first_frames": 0,
         "select_every_nth": 1,
-        "format": "Wan",
+        "format": "AnimateDiff",
         "choose video to upload": "image",
         "videopreview": {
           "hidden": false,
@@ -204,7 +204,7 @@
             "force_rate": 24,
             "custom_width": 0,
             "custom_height": 0,
-            "frame_load_cap": 121,
+            "frame_load_cap": 161,
             "skip_first_frames": 0,
             "select_every_nth": 1
           }
@@ -215,8 +215,8 @@
       "id": 74,
       "type": "easy showAnything",
       "pos": [
-        -7092.43212890625,
-        260.318359375
+        -6584.49365234375,
+        -57.3935432434082
       ],
       "size": [
         638.2862548828125,
@@ -247,15 +247,15 @@
         "widget_ue_connectable": {}
       },
       "widgets_values": [
-        "{'source_fps': 30.0, 'source_frame_count': 782, 'source_duration': 26.066666666666666, 'source_width': 1080, 'source_height': 1920, 'loaded_fps': 24.0, 'loaded_frame_count': 121, 'loaded_duration': 5.041666666666666, 'loaded_width': 1080, 'loaded_height': 1920, 'fps': 24.0, 'duration': 2.2675736961451248e-05, 'frame_count': 121, 'audio_present': True, 'skeleton_layout': 'UCoco23', 'points': 23, 'primary_bpm': None, 'bpm_confidence': 0.0, 'bpm_candidates': [], 'tempo_stability': 0.0, 'beat_times': array([], dtype=float64), 'beat_strength': array([          0]), 'beat_consistency': 0.0, 'freq_bands': {'sub_bass': {'energy': array([          0]), 'peak_freq': 0, 'spectral_centroid': 0, 'rms': 0.0}, 'bass': {'energy': array([          0]), 'peak_freq': 0, 'spectral_centroid': 0, 'rms': 0.0}, 'low_mid': {'energy': array([          0]), 'peak_freq': 0, 'spectral_centroid': 0, 'rms': 0.0}, 'mid': {'energy': array([          0]), 'peak_freq': 0, 'spectral_centroid': 0, 'rms': 0.0}, 'high_mid': {'energy': array([          0]), 'peak_freq': 0, 'spectral_centroid': 0, 'rms': 0.0}, 'highs': {'energy': array([          0]), 'peak_freq': 0, 'spectral_centroid': 0, 'rms': 0.0}, 'air': {'energy': array([          0]), 'peak_freq': 0, 'spectral_centroid': 0, 'rms': 0.0}}, 'onsets': {'combined_strength': array([          0]), 'combined_times': array([], dtype=float64), 'methods': {'hfc': {'times': array([], dtype=float64), 'strength': array([          0]), 'count': 0}}, 'total_onsets': 0}, 'rhythm_patterns': {'tempo_consistency': 0.0, 'average_interval': 0.5, 'swing_ratio': 1.0, 'has_swing': False, 'syncopation': 0.0, 'groove_strength': 0.0}, 'total_frames': 1, 'sample_rate': 44100, 'beat': array([          0]), 'bass': array([          0]), 'energy': array([          0]), 'bpm_status': 'unavailable', 'audio_analysis_performed': True}"
+        "{'source_fps': 30.0, 'source_frame_count': 782, 'source_duration': 26.066666666666666, 'source_width': 1080, 'source_height': 1920, 'loaded_fps': 24.0, 'loaded_frame_count': 161, 'loaded_duration': 6.708333333333333, 'loaded_width': 1080, 'loaded_height': 1920, 'fps': 24.0, 'duration': 2.2675736961451248e-05, 'frame_count': 161, 'audio_present': True, 'skeleton_layout': 'UCoco23', 'points': 23, 'primary_bpm': None, 'bpm_confidence': 0.0, 'bpm_candidates': [], 'tempo_stability': 0.0, 'beat_times': array([], dtype=float64), 'beat_strength': array([          0]), 'beat_consistency': 0.0, 'freq_bands': {'sub_bass': {'energy': array([          0]), 'peak_freq': 0, 'spectral_centroid': 0, 'rms': 0.0}, 'bass': {'energy': array([          0]), 'peak_freq': 0, 'spectral_centroid': 0, 'rms': 0.0}, 'low_mid': {'energy': array([          0]), 'peak_freq': 0, 'spectral_centroid': 0, 'rms': 0.0}, 'mid': {'energy': array([          0]), 'peak_freq': 0, 'spectral_centroid': 0, 'rms': 0.0}, 'high_mid': {'energy': array([          0]), 'peak_freq': 0, 'spectral_centroid': 0, 'rms': 0.0}, 'highs': {'energy': array([          0]), 'peak_freq': 0, 'spectral_centroid': 0, 'rms': 0.0}, 'air': {'energy': array([          0]), 'peak_freq': 0, 'spectral_centroid': 0, 'rms': 0.0}}, 'onsets': {'combined_strength': array([          0]), 'combined_times': array([], dtype=float64), 'methods': {'hfc': {'times': array([], dtype=float64), 'strength': array([          0]), 'count': 0}}, 'total_onsets': 0}, 'rhythm_patterns': {'tempo_consistency': 0.0, 'average_interval': 0.5, 'swing_ratio': 1.0, 'has_swing': False, 'syncopation': 0.0, 'groove_strength': 0.0}, 'total_frames': 1, 'sample_rate': 44100, 'beat': array([          0]), 'bass': array([          0]), 'energy': array([          0]), 'bpm_status': 'unavailable', 'audio_analysis_performed': True}"
       ]
     },
     {
       "id": 75,
       "type": "easy showAnything",
       "pos": [
-        -7100.33642578125,
-        -234.21151733398438
+        -7142.740234375,
+        -281.8094482421875
       ],
       "size": [
         210,
@@ -286,15 +286,15 @@
         "widget_ue_connectable": {}
       },
       "widgets_values": [
-        "{\"source_fps\": 30.0, \"source_frame_count\": 782, \"source_duration\": 26.066666666666666, \"source_width\": 1080, \"source_height\": 1920, \"loaded_fps\": 24.0, \"loaded_frame_count\": 121, \"loaded_duration\": 5.041666666666666, \"loaded_width\": 1080, \"loaded_height\": 1920}"
+        "{\"source_fps\": 30.0, \"source_frame_count\": 782, \"source_duration\": 26.066666666666666, \"source_width\": 1080, \"source_height\": 1920, \"loaded_fps\": 24.0, \"loaded_frame_count\": 161, \"loaded_duration\": 6.708333333333333, \"loaded_width\": 1080, \"loaded_height\": 1920}"
       ]
     },
     {
       "id": 79,
       "type": "BAIS1C_SourceVideoLoader",
       "pos": [
-        -7102.7197265625,
-        -426.6286315917969
+        -7111.869140625,
+        -537.4847412109375
       ],
       "size": [
         382.0249938964844,
@@ -307,7 +307,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 226
+          "link": 261
         },
         {
           "name": "audio",
@@ -325,7 +325,7 @@
           "name": "images",
           "type": "IMAGE",
           "links": [
-            257
+            262
           ]
         },
         {
@@ -363,8 +363,8 @@
       "id": 81,
       "type": "easy showAnything",
       "pos": [
-        -5605.923828125,
-        -286.8503112792969
+        -5549.5283203125,
+        -515.4147338867188
       ],
       "size": [
         458.8040771484375,
@@ -395,15 +395,15 @@
         "widget_ue_connectable": {}
       },
       "widgets_values": [
-        "Stickman video: 121 frames (460x832), viz=stickman, bg=black, skeleton=UCoco23"
+        "Stickman video: 161 frames (460x832), viz=skeleton, bg=black, skeleton=COCO-18 (using 18 points)"
       ]
     },
     {
       "id": 83,
       "type": "BAIS1C_PoseToVideoRenderer",
       "pos": [
-        -6009.81787109375,
-        -443.071044921875
+        -6025.14990234375,
+        -530.4599609375
       ],
       "size": [
         353.0064392089844,
@@ -456,7 +456,7 @@
       "widgets_values": [
         460,
         832,
-        "stickman",
+        "skeleton",
         "black",
         false
       ]
@@ -465,8 +465,8 @@
       "id": 85,
       "type": "BAIS1C_PoseTensorExtract",
       "pos": [
-        -6455.86279296875,
-        -447.68267822265625
+        -6514.12451171875,
+        -530.4722900390625
       ],
       "size": [
         362.8853454589844,
@@ -479,7 +479,7 @@
         {
           "name": "video_frames",
           "type": "IMAGE",
-          "link": 257
+          "link": 262
         },
         {
           "name": "sync_meta",
@@ -504,12 +504,12 @@
       "properties": {
         "aux_id": "BAIS1C/BAIS1Cs_VACE_DANCE_SYNC_SUITE",
         "ver": "afefe790ba100af005bf0744d5e72a35521878e7",
-        "widget_ue_connectable": {},
-        "Node name for S&R": "BAIS1C_PoseTensorExtract"
+        "Node name for S&R": "BAIS1C_PoseTensorExtract",
+        "widget_ue_connectable": {}
       },
       "widgets_values": [
         false,
-        true
+        false
       ]
     }
   ],
@@ -537,14 +537,6 @@
       79,
       1,
       "AUDIO"
-    ],
-    [
-      226,
-      73,
-      0,
-      79,
-      0,
-      "IMAGE"
     ],
     [
       229,
@@ -595,14 +587,6 @@
       "*"
     ],
     [
-      257,
-      79,
-      0,
-      85,
-      0,
-      "IMAGE"
-    ],
-    [
       258,
       79,
       2,
@@ -617,16 +601,32 @@
       83,
       0,
       "POSE"
+    ],
+    [
+      261,
+      73,
+      0,
+      79,
+      0,
+      "IMAGE"
+    ],
+    [
+      262,
+      79,
+      0,
+      85,
+      0,
+      "IMAGE"
     ]
   ],
   "groups": [],
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.9646149645000015,
+      "scale": 0.45,
       "offset": [
-        5657.2425068404955,
-        475.55299679680996
+        8083.214643169661,
+        1533.4599900775493
       ]
     },
     "frontendVersion": "1.23.4",
