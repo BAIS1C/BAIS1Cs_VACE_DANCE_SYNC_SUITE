@@ -3,7 +3,7 @@ import torch
 import json
 import os
 
-from .dwpose_detector import create_dwpose_detector
+from ..dwpose_detector import create_dwpose_detector
 
 class BAIS1C_PoseExtractor:
     @classmethod
