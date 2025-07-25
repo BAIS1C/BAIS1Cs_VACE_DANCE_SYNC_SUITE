@@ -3,7 +3,7 @@ import torch
 import json
 import sys, os
 
-# Ensure the dwpose module can be found
+# Add the suite root to path for dwpose import
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from dwpose.dwpose_detector import create_dwpose_detector
 
@@ -59,14 +59,14 @@ class BAIS1C_PoseExtractor:
         num_success = sum(1 for r in results if r is not None)
         print(f"[PoseExtractor] Summary: {num_success}/{len(results)} frames with valid pose")
 
-        # Fill in blanks with zeroed placeholders
+        # Fill in blanks
         for i in range(len(results)):
             if results[i] is None:
                 results[i] = np.zeros((18, 2), dtype=np.float32)
 
         pose_tensor = np.stack(results).astype(np.float32)
 
-        # Temporal smoothing if enabled
+        # Optional smoothing
         if temporal_smoothing:
             print("[PoseExtractor] Applying temporal smoothing...")
             smoothed = []
@@ -79,9 +79,19 @@ class BAIS1C_PoseExtractor:
                 smoothed.append(np.mean(frames_to_avg, axis=0))
             pose_tensor = np.stack(smoothed)
 
-        # Attach diagnostic metadata
+        # Meta diagnostics
         sync_meta["pose_extraction_success"] = num_success > 0
         sync_meta["successful_extractions"] = num_success
         sync_meta["extraction_rate"] = round(num_success / len(results), 4)
 
         return (pose_tensor, sync_meta)
+
+
+# ✅ Node registration (was previously missing after rewrite)
+NODE_CLASS_MAPPINGS = {
+    "BAIS1C_PoseExtractor": BAIS1C_PoseExtractor,
+}
+
+NODE_DISPLAY_NAME_MAPPINGS = {
+    "BAIS1C_PoseExtractor": "🟢 BAIS1C Pose Extractor",
+}
