@@ -3,8 +3,9 @@ import torch
 import json
 import sys, os
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from dwpose_detector import create_dwpose_detector
+# Ensure the dwpose module can be found
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+from dwpose.dwpose_detector import create_dwpose_detector
 
 
 class BAIS1C_PoseExtractor:
@@ -58,7 +59,7 @@ class BAIS1C_PoseExtractor:
         num_success = sum(1 for r in results if r is not None)
         print(f"[PoseExtractor] Summary: {num_success}/{len(results)} frames with valid pose")
 
-        # Fill in blanks with nearest valid pose
+        # Fill in blanks with zeroed placeholders
         for i in range(len(results)):
             if results[i] is None:
                 results[i] = np.zeros((18, 2), dtype=np.float32)
