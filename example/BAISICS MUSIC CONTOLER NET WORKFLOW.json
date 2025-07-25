@@ -1,22 +1,22 @@
 {
-  "id": "058887ab-7524-480f-8c7b-360b4415e23b",
+  "id": "6f1317f3-0935-4887-90be-cf3ab57e216d",
   "revision": 0,
-  "last_node_id": 79,
-  "last_link_id": 229,
+  "last_node_id": 83,
+  "last_link_id": 240,
   "nodes": [
     {
       "id": 34,
       "type": "easy showAnything",
       "pos": [
-        -4908.7001953125,
-        429.46783447265625
+        -5493.3408203125,
+        238.5640411376953
       ],
       "size": [
-        411.1089782714844,
-        164.1816864013672
+        630.9561767578125,
+        535.7571411132812
       ],
       "flags": {},
-      "order": 10,
+      "order": 13,
       "mode": 0,
       "inputs": [
         {
@@ -40,58 +40,19 @@
         "widget_ue_connectable": {}
       },
       "widgets_values": [
-        "tensor([[[0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.],\n         [0., 0.]]])"
-      ]
-    },
-    {
-      "id": 54,
-      "type": "easy showAnything",
-      "pos": [
-        -5060.91357421875,
-        735.5399780273438
-      ],
-      "size": [
-        411.1089782714844,
-        164.1816864013672
-      ],
-      "flags": {},
-      "order": 12,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "anything",
-          "shape": 7,
-          "type": "*",
-          "link": 196
-        }
-      ],
-      "outputs": [
-        {
-          "name": "output",
-          "type": "*",
-          "links": []
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfyui-easy-use",
-        "ver": "1.3.1",
-        "Node name for S&R": "easy showAnything",
-        "widget_ue_connectable": {}
-      },
-      "widgets_values": [
-        "Failed to load pose data"
+        "tensor([[[0.5000, 0.1200],\n         [0.5000, 0.2000],\n         [0.4800, 0.1200],\n         ...,\n         [0.0000, 0.0000],\n         [0.0000, 0.0000],\n         [0.0000, 0.0000]],\n\n        [[0.5000, 0.1200],\n         [0.5000, 0.2000],\n         [0.4800, 0.1200],\n         ...,\n         [0.0000, 0.0000],\n         [0.0000, 0.0000],\n         [0.0000, 0.0000]],\n\n        [[0.5000, 0.1200],\n         [0.5000, 0.2000],\n         [0.4800, 0.1200],\n         ...,\n         [0.0000, 0.0000],\n         [0.0000, 0.0000],\n         [0.0000, 0.0000]],\n\n        ...,\n\n        [[0.5000, 0.1200],\n         [0.5000, 0.2000],\n         [0.4800, 0.1200],\n         ...,\n         [0.0000, 0.0000],\n         [0.0000, 0.0000],\n         [0.0000, 0.0000]],\n\n        [[0.5000, 0.1200],\n         [0.5000, 0.2000],\n         [0.4800, 0.1200],\n         ...,\n         [0.0000, 0.0000],\n         [0.0000, 0.0000],\n         [0.0000, 0.0000]],\n\n        [[0.5000, 0.1200],\n         [0.5000, 0.2000],\n         [0.4800, 0.1200],\n         ...,\n         [0.0000, 0.0000],\n         [0.0000, 0.0000],\n         [0.0000, 0.0000]]])"
       ]
     },
     {
       "id": 56,
       "type": "easy showAnything",
       "pos": [
-        -6390.54248046875,
-        279.89813232421875
+        -6638.05029296875,
+        227.9732208251953
       ],
       "size": [
-        411.1089782714844,
-        164.1816864013672
+        337.54852294921875,
+        268.89715576171875
       ],
       "flags": {},
       "order": 6,
@@ -117,14 +78,16 @@
         "Node name for S&R": "easy showAnything",
         "widget_ue_connectable": {}
       },
-      "widgets_values": []
+      "widgets_values": [
+        "📺 Video: 781 frames @ 30.0 FPS\n⏱️  Duration: 0.00s\n🎵 BPM: 120.00 (Confidence: 0.00)\n🥁 Beat Consistency: 0.00\n🎼 Total Frames: 1\n🎶 Rhythm: Straight (Ratio: 1.00)\n🎯 Groove Strength: 0.00\n🔊 Frequency RMS: Bass: 0.000 | Mid: 0.000 | Highs: 0.000\n🎵 Detected Beats: 0\n✅ Frame consistency: 1 frames"
+      ]
     },
     {
       "id": 59,
       "type": "SoundFlow_TrimAudio",
       "pos": [
-        -5916.42236328125,
-        336.7784118652344
+        -5878.86279296875,
+        -119.61119079589844
       ],
       "size": [
         270,
@@ -145,8 +108,7 @@
           "name": "audio",
           "type": "AUDIO",
           "links": [
-            195,
-            199
+            195
           ]
         }
       ],
@@ -165,8 +127,8 @@
       "id": 60,
       "type": "LoadAudio",
       "pos": [
-        -5909.0107421875,
-        531.1162109375
+        -5881.03466796875,
+        10.109371185302734
       ],
       "size": [
         274.080078125,
@@ -201,27 +163,27 @@
       "id": 64,
       "type": "VHS_VideoCombine",
       "pos": [
-        -3608.5732421875,
-        327.7215881347656
+        -4437.42724609375,
+        -616.92041015625
       ],
       "size": [
         214.7587890625,
         688.827880859375
       ],
       "flags": {},
-      "order": 11,
+      "order": 12,
       "mode": 0,
       "inputs": [
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 198
+          "link": 236
         },
         {
           "name": "audio",
           "shape": 7,
           "type": "AUDIO",
-          "link": 199
+          "link": 238
         },
         {
           "name": "meta_batch",
@@ -279,8 +241,8 @@
       "id": 68,
       "type": "BAIS1C_PoseCheckpoint",
       "pos": [
-        -5499.09375,
-        -12.767012596130371
+        -5981.00732421875,
+        -223.1498565673828
       ],
       "size": [
         222.54257202148438,
@@ -306,7 +268,8 @@
           "name": "pose_tensor",
           "type": "POSE",
           "links": [
-            202
+            202,
+            239
           ]
         },
         {
@@ -330,15 +293,15 @@
       "id": 69,
       "type": "BAIS1C_MusicControlNet",
       "pos": [
-        -5507.8388671875,
-        116.19145965576172
+        -5347.6640625,
+        -208.5779266357422
       ],
       "size": [
-        314.484375,
-        434
+        280.3062438964844,
+        133.70025634765625
       ],
       "flags": {},
-      "order": 9,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
@@ -368,16 +331,12 @@
         {
           "name": "sync_report",
           "type": "STRING",
-          "links": [
-            198
-          ]
+          "links": []
         },
         {
           "name": "sync_report",
           "type": "STRING",
-          "links": [
-            196
-          ]
+          "links": []
         }
       ],
       "properties": {
@@ -387,7 +346,7 @@
         "widget_ue_connectable": {}
       },
       "widgets_values": [
-        120,
+        "beat_aligned",
         24
       ]
     },
@@ -395,12 +354,12 @@
       "id": 72,
       "type": "BAIS1C_PoseExtractor",
       "pos": [
-        -6284.0361328125,
-        -23.14085578918457
+        -6524.6220703125,
+        -230.84095764160156
       ],
       "size": [
-        477.1958923339844,
-        194
+        406.1421813964844,
+        208.7120819091797
       ],
       "flags": {},
       "order": 5,
@@ -445,9 +404,9 @@
         "widget_ue_connectable": {}
       },
       "widgets_values": [
-        "video",
+        "test",
         24,
-        0.5000000000000001,
+        0.24000000000000005,
         0.1
       ]
     },
@@ -455,12 +414,12 @@
       "id": 73,
       "type": "VHS_LoadVideo",
       "pos": [
-        -7224.48876953125,
-        10.348949432373047
+        -7391.51220703125,
+        -260.5265808105469
       ],
       "size": [
-        247.455078125,
-        728.8099365234375
+        279.4754943847656,
+        784.844482421875
       ],
       "flags": {},
       "order": 0,
@@ -545,15 +504,15 @@
       "id": 74,
       "type": "easy showAnything",
       "pos": [
-        -4442.92919921875,
-        26.336393356323242
+        -6187.37744140625,
+        235.3693084716797
       ],
       "size": [
-        411.1089782714844,
-        164.1816864013672
+        638.2862548828125,
+        544.2382202148438
       ],
       "flags": {},
-      "order": 8,
+      "order": 9,
       "mode": 0,
       "inputs": [
         {
@@ -577,7 +536,7 @@
         "widget_ue_connectable": {}
       },
       "widgets_values": [
-        "{\"frame_count\": 781, \"fps\": 24.0, \"duration\": 32.541666666666664, \"bpm\": null, \"sample_rate\": null, \"audio_present\": true, \"title\": \"video\", \"processed_frames\": 781, \"pose_extraction_success\": true}"
+        "{'source_fps': 30.0, 'source_frame_count': 782, 'source_duration': 26.066666666666666, 'source_width': 1080, 'source_height': 1920, 'loaded_fps': 30.0, 'loaded_frame_count': 781, 'loaded_duration': 26.03333333333333, 'loaded_width': 1080, 'loaded_height': 1920, 'fps': 24.0, 'duration': 2.2675736961451248e-05, 'frame_count': 781, 'audio_present': True, 'primary_bpm': 120.0, 'bpm_confidence': 0.0, 'bpm_candidates': [], 'tempo_stability': 0.0, 'beat_times': array([], dtype=float64), 'beat_strength': array([          0]), 'beat_consistency': 0.0, 'freq_bands': {'sub_bass': {'energy': array([          0]), 'peak_freq': 0, 'spectral_centroid': 0, 'rms': 0.0}, 'bass': {'energy': array([          0]), 'peak_freq': 0, 'spectral_centroid': 0, 'rms': 0.0}, 'low_mid': {'energy': array([          0]), 'peak_freq': 0, 'spectral_centroid': 0, 'rms': 0.0}, 'mid': {'energy': array([          0]), 'peak_freq': 0, 'spectral_centroid': 0, 'rms': 0.0}, 'high_mid': {'energy': array([          0]), 'peak_freq': 0, 'spectral_centroid': 0, 'rms': 0.0}, 'highs': {'energy': array([          0]), 'peak_freq': 0, 'spectral_centroid': 0, 'rms': 0.0}, 'air': {'energy': array([          0]), 'peak_freq': 0, 'spectral_centroid': 0, 'rms': 0.0}}, 'onsets': {'combined_strength': array([          0]), 'combined_times': array([], dtype=float64), 'methods': {'hfc': {'times': array([], dtype=float64), 'strength': array([          0]), 'count': 0}}, 'total_onsets': 0}, 'rhythm_patterns': {'tempo_consistency': 0.0, 'average_interval': 0.5, 'swing_ratio': 1.0, 'has_swing': False, 'syncopation': 0.0, 'groove_strength': 0.0}, 'total_frames': 1, 'sample_rate': 44100, 'beat': array([          0]), 'bass': array([          0]), 'energy': array([          0]), 'audio_analysis_performed': True, 'title': 'test', 'processed_frames': 781, 'pose_extraction_success': False, 'dwpose_available': True, 'successful_extractions': 0, 'extraction_rate': 0.0}"
       ]
     },
     {
@@ -588,8 +547,8 @@
         214.99826049804688
       ],
       "size": [
-        411.1089782714844,
-        164.1816864013672
+        210,
+        287.93634033203125
       ],
       "flags": {},
       "order": 2,
@@ -623,8 +582,8 @@
       "id": 79,
       "type": "BAIS1C_SourceVideoLoader",
       "pos": [
-        -6794.62890625,
-        -2.715242385864258
+        -6960.7822265625,
+        -253.68617248535156
       ],
       "size": [
         303.4390563964844,
@@ -661,7 +620,9 @@
         {
           "name": "audio",
           "type": "AUDIO",
-          "links": null
+          "links": [
+            240
+          ]
         },
         {
           "name": "sync_meta",
@@ -685,6 +646,108 @@
         "widget_ue_connectable": {}
       },
       "widgets_values": []
+    },
+    {
+      "id": 81,
+      "type": "easy showAnything",
+      "pos": [
+        -4789.0517578125,
+        239.4682159423828
+      ],
+      "size": [
+        458.8040771484375,
+        522.8451538085938
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "anything",
+          "shape": 7,
+          "type": "*",
+          "link": 235
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "*",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-easy-use",
+        "ver": "1.3.1",
+        "Node name for S&R": "easy showAnything",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        "Failed to load pose data"
+      ]
+    },
+    {
+      "id": 83,
+      "type": "BAIS1C_PoseToVideoRenderer",
+      "pos": [
+        -5434.79296875,
+        -636.207275390625
+      ],
+      "size": [
+        328.9859313964844,
+        194
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "pose_tensor",
+          "type": "POSE",
+          "link": 239
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 240
+        }
+      ],
+      "outputs": [
+        {
+          "name": "stickman_video",
+          "type": "IMAGE",
+          "links": [
+            236
+          ]
+        },
+        {
+          "name": "render_info",
+          "type": "STRING",
+          "links": [
+            235
+          ]
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            238
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "BAIS1C/BAIS1Cs_VACE_DANCE_SYNC_SUITE",
+        "ver": "afefe790ba100af005bf0744d5e72a35521878e7",
+        "Node name for S&R": "BAIS1C_PoseToVideoRenderer",
+        "widget_ue_connectable": {}
+      },
+      "widgets_values": [
+        460,
+        832,
+        "stickman",
+        "black",
+        false
+      ]
     }
   ],
   "links": [
@@ -705,36 +768,12 @@
       "AUDIO"
     ],
     [
-      196,
-      69,
-      2,
-      54,
-      0,
-      "*"
-    ],
-    [
       197,
       69,
       0,
       34,
       0,
       "*"
-    ],
-    [
-      198,
-      69,
-      1,
-      64,
-      0,
-      "IMAGE"
-    ],
-    [
-      199,
-      59,
-      0,
-      64,
-      1,
-      "AUDIO"
     ],
     [
       202,
@@ -831,16 +870,56 @@
       56,
       0,
       "*"
+    ],
+    [
+      235,
+      83,
+      1,
+      81,
+      0,
+      "*"
+    ],
+    [
+      236,
+      83,
+      0,
+      64,
+      0,
+      "IMAGE"
+    ],
+    [
+      238,
+      83,
+      2,
+      64,
+      1,
+      "AUDIO"
+    ],
+    [
+      239,
+      68,
+      0,
+      83,
+      0,
+      "POSE"
+    ],
+    [
+      240,
+      79,
+      1,
+      83,
+      1,
+      "AUDIO"
     ]
   ],
   "groups": [],
   "config": {},
   "extra": {
     "ds": {
-      "scale": 1.0610764609500007,
+      "scale": 0.45,
       "offset": [
-        5589.577869368136,
-        -64.91063135775832
+        6913.998537297768,
+        1693.1303196332756
       ]
     },
     "frontendVersion": "1.23.4",
