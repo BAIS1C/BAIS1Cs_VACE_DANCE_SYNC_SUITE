@@ -153,40 +153,13 @@ class BAIS1C_PoseTensorExtract:
             try:
                 result = self.detector(frame_np)
                 bodies = result["bodies"]["candidate"]
-                
-                # DEBUG BLOCK - Check coordinate values (first 3 frames only)
-                if i < 3:
-                    print(f"[DEBUG] Frame {i}: bodies shape = {bodies.shape}")
-                
-                # FIX: Handle both 2D and 3D array cases
-                if len(bodies.shape) == 3 and bodies.shape[0] > 0:
-                    # Multiple people detected: (num_people, num_keypoints, 2)
-                    pose_data = bodies[0]  # Take first person
-                    print(f"[PoseTensorExtract] Frame {i}: ✅ Pose detected from multiple people (shape {pose_data.shape})")
-                elif len(bodies.shape) == 2 and bodies.shape[0] > 0:
-                    # Single person detected: (num_keypoints, 2)
-                    pose_data = bodies
-                    if i < 3:
-                        print(f"[DEBUG] Single person keypoints range: X={pose_data[:, 0].min():.3f}-{pose_data[:, 0].max():.3f}, Y={pose_data[:, 1].min():.3f}-{pose_data[:, 1].max():.3f}")
-                        print(f"[DEBUG] Non-zero keypoints: {np.count_nonzero(np.any(pose_data, axis=1))}")
-                    print(f"[PoseTensorExtract] Frame {i}: ✅ Pose detected from single person (shape {pose_data.shape})")
+                if bodies.shape[0] > 0:
+                    pose = self._ensure_23_points(bodies[0])
+                    results.append(pose)
+                    print(f"[PoseTensorExtract] Frame {i}: ✅ Pose detected (shape {pose.shape})")
                 else:
-                    # No valid pose data
                     results.append(np.zeros((23,2), dtype=np.float32))
-                    print(f"[PoseTensorExtract] Frame {i}: ❌ No valid pose data")
-                    continue
-                
-                # Process the pose data
-                pose = self._ensure_23_points(pose_data)
-                
-                # DEBUG: Check after processing (first 3 frames only)
-                if i < 3:
-                    print(f"[DEBUG] After _ensure_23_points: shape={pose.shape}")
-                    print(f"[DEBUG] After processing range: X={pose[:, 0].min():.3f}-{pose[:, 0].max():.3f}, Y={pose[:, 1].min():.3f}-{pose[:, 1].max():.3f}")
-                    print(f"[DEBUG] Non-zero keypoints after: {np.count_nonzero(np.any(pose, axis=1))}")
-                
-                results.append(pose)
-                
+                    print(f"[PoseTensorExtract] Frame {i}: ❌ No pose detected (zeroed)")
             except Exception as e:
                 print(f"[PoseTensorExtract] Frame {i}: ❌ Error during pose detection: {e}")
                 results.append(np.zeros((23,2), dtype=np.float32))
@@ -196,10 +169,6 @@ class BAIS1C_PoseTensorExtract:
         print(f"[PoseTensorExtract] Summary: {num_success}/{len(results)} frames with valid pose")
 
         pose_tensor = np.stack(results).astype(np.float32)
-
-        # DEBUG: Check final tensor
-        print(f"[DEBUG] Final pose_tensor shape: {pose_tensor.shape}")
-        print(f"[DEBUG] Final tensor range: X={pose_tensor[:, :, 0].min():.3f}-{pose_tensor[:, :, 0].max():.3f}, Y={pose_tensor[:, :, 1].min():.3f}-{pose_tensor[:, :, 1].max():.3f}")
 
         # Temporal smoothing only between valid frames (zeros = static, not interpolated)
         if temporal_smoothing:
@@ -239,6 +208,11 @@ def _test_pose_tensor_extract():
     pose_tensor, meta = extractor.extract_pose(dummy_frames, sync_meta, temporal_smoothing=True, use_dummy=True)
     print(f"[TEST] Pose tensor shape: {pose_tensor.shape} (should be n_frames x 23 x 2)")
     print(f"[TEST] Meta: {meta}")
+    print(f"[TEST] Sample pose coordinates:")
+    print(f"  Nose (0): {pose_tensor[0, 0]}")
+    print(f"  Left shoulder (5): {pose_tensor[0, 5]}")
+    print(f"  Right shoulder (6): {pose_tensor[0, 6]}")
+    print(f"  Left hip (11): {pose_tensor[0, 11]}")
     assert pose_tensor.shape[1:] == (23, 2)
     print("[TEST PASSED]")
 
