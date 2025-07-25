@@ -3,7 +3,11 @@ import torch
 import json
 import sys, os
 
+<<<<<<< HEAD
 # Ensure the dwpose module can be found
+=======
+# Add the suite root to path for dwpose import
+>>>>>>> parent of eab2b17 (Update pose_tensor_extract.py)
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from dwpose.dwpose_detector import create_dwpose_detector
 
@@ -59,7 +63,11 @@ class BAIS1C_PoseExtractor:
         num_success = sum(1 for r in results if r is not None)
         print(f"[PoseExtractor] Summary: {num_success}/{len(results)} frames with valid pose")
 
+<<<<<<< HEAD
         # Fill in blanks with zeroed placeholders
+=======
+        # Fill in blanks
+>>>>>>> parent of eab2b17 (Update pose_tensor_extract.py)
         for i in range(len(results)):
             if results[i] is None:
                 results[i] = np.zeros((18, 2), dtype=np.float32)
