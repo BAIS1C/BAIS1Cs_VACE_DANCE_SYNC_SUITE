@@ -3,14 +3,9 @@ import torch
 import json
 import sys, os
 
-<<<<<<< HEAD
 # Add the suite root to path for dwpose import
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from dwpose.dwpose_detector import create_dwpose_detector
-=======
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from dwpose_detector import create_dwpose_detector
->>>>>>> parent of 50cb9a7 (Update pose_tensor_extract.py)
 
 
 class BAIS1C_PoseExtractor:
@@ -64,11 +59,7 @@ class BAIS1C_PoseExtractor:
         num_success = sum(1 for r in results if r is not None)
         print(f"[PoseExtractor] Summary: {num_success}/{len(results)} frames with valid pose")
 
-<<<<<<< HEAD
         # Fill in blanks
-=======
-        # Fill in blanks with nearest valid pose
->>>>>>> parent of 50cb9a7 (Update pose_tensor_extract.py)
         for i in range(len(results)):
             if results[i] is None:
                 results[i] = np.zeros((18, 2), dtype=np.float32)
