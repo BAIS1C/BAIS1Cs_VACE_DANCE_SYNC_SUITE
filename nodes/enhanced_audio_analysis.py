@@ -45,6 +45,7 @@ class EnhancedAudioAnalyzer:
     def analyze_comprehensive(self, waveform: Any, target_fps: float = 24.0, debug: bool = False) -> Dict:
         """
         Comprehensive audio analysis returning all sync-relevant features.
+        All frame-based arrays now consistently sized to total_frames.
         """
         # Handle input types robustly
         if hasattr(waveform, 'cpu'):  # torch.Tensor
@@ -65,12 +66,14 @@ class EnhancedAudioAnalyzer:
         if debug:
             print(f"[Enhanced Audio] {duration:.2f}s, {self.sample_rate}Hz, {total_frames} frames @ {target_fps} FPS")
 
+        # Pass total_frames to all analysis methods for consistency
         bpm_analysis = self._analyze_bpm_robust(waveform, debug)
-        beat_analysis = self._analyze_beat_patterns(waveform, bpm_analysis.get('primary_bpm', 120.0), debug)
+        beat_analysis = self._analyze_beat_patterns(waveform, bpm_analysis.get('primary_bpm', 120.0), total_frames, debug)
         freq_analysis = self._analyze_frequency_bands(waveform, total_frames, debug)
         onset_analysis = self._analyze_onsets(waveform, total_frames, debug)
         rhythm_analysis = self._analyze_rhythmic_patterns(waveform, bpm_analysis.get('primary_bpm', 120.0), debug)
 
+        # Ensure all frame-based arrays are consistent
         result = {
             'primary_bpm': bpm_analysis.get('primary_bpm', 120.0),
             'bpm_confidence': bpm_analysis.get('confidence', 0.0),
@@ -78,29 +81,43 @@ class EnhancedAudioAnalyzer:
             'tempo_stability': bpm_analysis.get('stability', 0.0),
 
             'beat_times': beat_analysis.get('beat_times', []),
-            'beat_strength': beat_analysis.get('beat_strength', []),
+            'beat_strength': self._ensure_frame_length(beat_analysis.get('beat_strength', []), total_frames),
             'beat_consistency': beat_analysis.get('consistency', 0.0),
 
             'freq_bands': freq_analysis,
-
             'onsets': onset_analysis,
-
             'rhythm_patterns': rhythm_analysis,
 
             'total_frames': total_frames,
             'duration': duration,
             'sample_rate': self.sample_rate,
 
-            # Legacy compatibility
-            'beat': beat_analysis.get('beat_strength', []),
-            'bass': freq_analysis.get('bass', {}).get('energy', []),
-            'energy': freq_analysis.get('mid', {}).get('energy', [])
+            # Legacy compatibility with consistent sizing
+            'beat': self._ensure_frame_length(beat_analysis.get('beat_strength', []), total_frames),
+            'bass': self._ensure_frame_length(freq_analysis.get('bass', {}).get('energy', []), total_frames),
+            'energy': self._ensure_frame_length(freq_analysis.get('mid', {}).get('energy', []), total_frames)
         }
 
         if debug:
             self._print_analysis_summary(result)
 
         return result
+
+    def _ensure_frame_length(self, arr, target_frames):
+        """Ensure array matches target frame count exactly"""
+        if not isinstance(arr, np.ndarray):
+            arr = np.array(arr)
+        
+        if len(arr) == 0:
+            return np.zeros(target_frames)
+        
+        if len(arr) == target_frames:
+            return arr
+        
+        # Resample to target length
+        old_indices = np.linspace(0, len(arr) - 1, len(arr))
+        new_indices = np.linspace(0, len(arr) - 1, target_frames)
+        return np.interp(new_indices, old_indices, arr)
 
     def _analyze_bpm_robust(self, waveform: np.ndarray, debug: bool = False) -> Dict:
         """Robust BPM detection with multiple methods and confidence scoring."""
@@ -210,28 +227,29 @@ class EnhancedAudioAnalyzer:
                 break
         return bpm
 
-    def _analyze_beat_patterns(self, waveform: np.ndarray, bpm: float, debug: bool = False) -> Dict:
+    def _analyze_beat_patterns(self, waveform: np.ndarray, bpm: float, total_frames: int, debug: bool = False) -> Dict:
         """
-        Advanced beat pattern analysis with sub-beat detection
+        Advanced beat pattern analysis with consistent frame sizing
         """
         try:
             tempo, beat_frames = librosa.beat.beat_track(
                 y=waveform, sr=self.sample_rate, units='time', bpm=bpm
             )
-            onset_env = librosa.onset.onset_strength(
-                y=waveform, sr=self.sample_rate, aggregate=np.median, fmax=8000, n_mels=256
-            )
+            
             beat_times = beat_frames
-            beat_strength = np.zeros(len(waveform) // (self.sample_rate // 100))  # 10ms resolution
+            duration = len(waveform) / self.sample_rate
+            
+            # Create beat_strength array with exact target_frames length
+            beat_strength = np.zeros(total_frames)
 
+            # Convert beat times to frame indices
             for beat_time in beat_times:
-                frame_idx = int(beat_time * 100)
-                if frame_idx < len(beat_strength):
-                    window_start = max(0, frame_idx - 5)
-                    window_end = min(len(beat_strength), frame_idx + 5)
-                    onset_frame = int(beat_time * self.sample_rate / 512)
-                    if onset_frame < len(onset_env):
-                        beat_strength[window_start:window_end] = onset_env[onset_frame]
+                frame_idx = int((beat_time / duration) * total_frames)
+                if 0 <= frame_idx < total_frames:
+                    # Apply beat strength in a small window
+                    window_start = max(0, frame_idx - 2)
+                    window_end = min(total_frames, frame_idx + 3)
+                    beat_strength[window_start:window_end] = 1.0
 
             if len(beat_times) > 1:
                 beat_intervals = np.diff(beat_times)
@@ -244,20 +262,22 @@ class EnhancedAudioAnalyzer:
 
             result = {
                 'beat_times': beat_times,
-                'beat_strength': beat_strength,
+                'beat_strength': beat_strength,  # Now exactly total_frames length
                 'consistency': consistency,
                 'sub_beats': sub_beat_times,
                 'beat_count': len(beat_times)
             }
+            
             if debug:
-                print(f"[Beat Analysis] {len(beat_times)} beats, Consistency: {consistency:.2f}, Sub-beats: {len(sub_beat_times)}")
+                print(f"[Beat Analysis] {len(beat_times)} beats, Beat strength shape: {beat_strength.shape}, Consistency: {consistency:.2f}")
+            
             return result
         except Exception as e:
             if debug:
                 print(f"[Beat Analysis] Error: {e}")
             return {
                 'beat_times': np.array([]),
-                'beat_strength': np.zeros(100),
+                'beat_strength': np.zeros(total_frames),  # Consistent fallback
                 'consistency': 0.0,
                 'sub_beats': np.array([]),
                 'beat_count': 0
@@ -291,7 +311,7 @@ class EnhancedAudioAnalyzer:
 
     def _analyze_frequency_bands(self, waveform: np.ndarray, total_frames: int, debug: bool = False) -> Dict:
         """
-        Multi-band EQ analysis for dance movement mapping
+        Multi-band EQ analysis with consistent frame sizing
         """
         try:
             stft = librosa.stft(waveform, hop_length=512, n_fft=2048)
@@ -309,34 +329,41 @@ class EnhancedAudioAnalyzer:
                         'rms': 0.0
                     }
                     continue
+                
                 band_magnitude = magnitude[freq_mask, :]
                 band_energy = np.mean(band_magnitude, axis=0)
+                
+                # Always resample to exact total_frames length
                 if len(band_energy) != total_frames:
-                    frame_indices = np.linspace(0, len(band_energy) - 1, total_frames)
-                    frame_indices = np.clip(frame_indices, 0, len(band_energy) - 1).astype(int)
-                    band_energy = band_energy[frame_indices]
+                    band_energy = self._ensure_frame_length(band_energy, total_frames)
+                
                 if np.max(band_energy) > 0:
                     band_energy = band_energy / np.max(band_energy)
+                
                 peak_freq_idx = np.argmax(np.mean(band_magnitude, axis=1))
                 if len(freqs[freq_mask]) > 0 and peak_freq_idx < len(freqs[freq_mask]):
                     peak_freq = freqs[freq_mask][peak_freq_idx]
                 else:
                     peak_freq = low_freq
+                
                 spectral_centroid = np.average(
                     freqs[freq_mask], weights=np.mean(band_magnitude, axis=1)
                 ) if np.any(freq_mask) else (low_freq + high_freq) / 2
+                
                 rms_energy = np.sqrt(np.mean(band_energy ** 2))
+                
                 band_analysis[band_name] = {
-                    'energy': band_energy,
+                    'energy': band_energy,  # Now guaranteed to be total_frames length
                     'peak_freq': float(peak_freq),
                     'spectral_centroid': float(spectral_centroid),
                     'rms': float(rms_energy)
                 }
+                
             if debug:
-                print(f"[Frequency Analysis] {len(self.freq_bands)} bands analyzed")
-                for band, data in band_analysis.items():
-                    print(f"  {band}: RMS={data['rms']:.3f}, Peak={data['peak_freq']:.0f}Hz")
+                print(f"[Frequency Analysis] {len(self.freq_bands)} bands analyzed, each with {total_frames} frames")
+                
             return band_analysis
+            
         except Exception as e:
             if debug:
                 print(f"[Frequency Analysis] Error: {e}")
