@@ -1,9 +1,11 @@
 import numpy as np
 import torch
 import json
-import os
+import sys, os
 
-from ..dwpose_detector import create_dwpose_detector
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from dwpose_detector import create_dwpose_detector
+
 
 class BAIS1C_PoseExtractor:
     @classmethod
