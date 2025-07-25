@@ -33,15 +33,20 @@ class BAIS1C_PoseToVideoRenderer:
     FUNCTION = "render_video"
     CATEGORY = "BAIS1C VACE Suite/Visualization"
 
-    def __init__(self):
-        # Skeleton for UCoco23 (see DWPose docs)
-        self.pose_connections = [
-            (0, 1), (0, 2), (1, 3), (2, 4),   # Head/neck
-            (5, 6), (5, 11), (6, 12), (11, 12),  # Torso
-            (5, 7), (7, 9), (6, 8), (8, 10),     # Arms
-            (11, 13), (13, 15), (12, 14), (14, 16), # Legs
-            (15, 17), (15, 18), (15, 19), (16, 20), (16, 21), (16, 22) # Feet
-        ]
+    # Official UCoco23 skeleton edge list
+    pose_connections = [
+        (0, 1), (0, 2), (1, 3), (2, 4),           # Head
+        (0, 5), (0, 6),                           # Nose to Shoulders
+        (5, 6),                                   # Shoulders
+        (5, 7), (7, 9),                           # Left arm
+        (6, 8), (8, 10),                          # Right arm
+        (5, 11), (6, 12),                         # Torso to hips
+        (11, 12),                                 # Hips
+        (11, 13), (13, 15),                       # Left leg
+        (12, 14), (14, 16),                       # Right leg
+        (15, 17), (17, 18), (15, 19),             # Left foot
+        (16, 20), (20, 21), (16, 22)              # Right foot
+    ]
 
     def render_video(self, pose_tensor, audio, width=460, height=832,
                      visualization="stickman", background="black", debug=False):
@@ -72,9 +77,11 @@ class BAIS1C_PoseToVideoRenderer:
 
             # Draw skeleton/stickman/dots
             if visualization in ("stickman", "skeleton"):
+                # Draw bones
                 for i, j in self.pose_connections:
                     if i < 23 and j < 23:
                         cv2.line(frame, keypoints[i], keypoints[j], (255, 255, 255), 2)
+                # Draw joints
                 for point in keypoints:
                     cv2.circle(frame, point, 4, (100, 200, 255), -1)
             elif visualization == "dots":
@@ -93,7 +100,7 @@ class BAIS1C_PoseToVideoRenderer:
 
 # Node registration for ComfyUI
 NODE_CLASS_MAPPINGS = {"BAIS1C_PoseToVideoRenderer": BAIS1C_PoseToVideoRenderer}
-NODE_DISPLAY_NAME_MAPPINGS = {"BAIS1C_PoseToVideoRenderer": "🦴 BAIS1C Pose To Video Renderer (DWPose23)"}
+NODE_DISPLAY_NAME_MAPPINGS = {"BAIS1C_PoseToVideoRenderer": "BAIS1C Pose To Video Renderer (DWPose23)"}
 
 # Self-test
 def test_pose_to_video_renderer():
