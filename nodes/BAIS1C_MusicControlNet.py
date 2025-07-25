@@ -72,30 +72,52 @@ class BAIS1C_MusicControlNet:
             if isinstance(waveform, torch.Tensor):
                 waveform = waveform.cpu().numpy()
             
-            # ✅ STEREO→MONO CONVERSION (stolen from SimpleDancePoser)
+            # ✅ STEREO→MONO CONVERSION (handle 3D audio tensors)
             if waveform.ndim > 1:
-                waveform = waveform.mean(axis=0)  # Average stereo channels
-                if debug:
-                    print(f"[MusicControlNet] Converted stereo to mono: {waveform.shape}")
+                print(f"[MusicControlNet] Original audio shape: {waveform.shape}")
+                
+                # Handle 3D tensors: (batch, channels, samples) or (batch, samples, channels)
+                if waveform.ndim == 3:
+                    # Squeeze out batch dimension first
+                    if waveform.shape[0] == 1:
+                        waveform = waveform.squeeze(0)  # Remove batch dim: (1,2,882000) → (2,882000)
+                        print(f"[MusicControlNet] Squeezed batch dimension: {waveform.shape}")
+                
+                # Now handle 2D: (channels, samples)
+                if waveform.ndim == 2:
+                    if waveform.shape[0] <= 8:  # Reasonable number of channels
+                        # Format: (channels, samples) - average across channels (axis=0)
+                        waveform = waveform.mean(axis=0)
+                        print(f"[MusicControlNet] Converted to mono: {waveform.shape}")
+                    else:
+                        # Format: (samples, channels) - average across channels (axis=1) 
+                        waveform = waveform.mean(axis=1)
+                        print(f"[MusicControlNet] Converted to mono: {waveform.shape}")
             
             # Normalize audio to prevent clipping
             if np.max(np.abs(waveform)) > 0:
                 waveform = waveform / np.max(np.abs(waveform))
             
-            # Calculate expected audio duration and target frames
+            # ✅ CRITICAL: Calculate expected audio duration and target frames
             audio_duration = len(waveform) / sample_rate
             target_n_frames = max(1, int(round(audio_duration * fps)))  # ✅ Ensure minimum 1 frame
             
-            if debug:
-                print(f"[MusicControlNet] Audio: {audio_duration:.3f}s ({len(waveform)} samples @ {sample_rate}Hz)")
-                print(f"[MusicControlNet] Target frames: {target_n_frames} @ {fps} FPS")
+            # ✅ DEBUG: Always log audio info regardless of debug flag
+            print(f"[MusicControlNet] RAW AUDIO: {len(waveform)} samples @ {sample_rate}Hz = {audio_duration:.3f}s")
+            print(f"[MusicControlNet] CALCULATED TARGET: {target_n_frames} frames @ {fps} FPS")
+            print(f"[MusicControlNet] ORIGINAL POSE: {original_n_frames} frames ({original_duration:.3f}s)")
+            print(f"[MusicControlNet] FINAL WAVEFORM SHAPE: {waveform.shape}")
             
-            # ✅ EMPTY AUDIO PROTECTION: If audio is too short, use frame-aligned mode
-            if audio_duration < 0.1:  # Less than 100ms
-                print(f"[MusicControlNet] WARNING: Audio too short ({audio_duration:.3f}s), using frame-aligned mode")
+            if debug:
+                print(f"[MusicControlNet] Expected 24s audio = {24 * sample_rate} samples")
+            
+            # ✅ EMPTY/INVALID AUDIO PROTECTION: Only override if audio is truly invalid
+            if audio_duration < 0.01:  # Less than 10ms - truly invalid
+                print(f"[MusicControlNet] ERROR: Invalid audio duration ({audio_duration:.3f}s), using original duration")
                 sync_mode = "frame_aligned"
                 target_n_frames = original_n_frames
                 audio_duration = original_duration
+            # For short but valid audio, still extend the poses to match
             
             analyzer = EnhancedAudioAnalyzer(sample_rate)
             audio_meta = analyzer.analyze_comprehensive(waveform, target_fps=fps, debug=debug)
@@ -147,7 +169,7 @@ class BAIS1C_MusicControlNet:
                 report.append("Motion segments retargeted to beats (anchor-to-beat alignment).")
 
                 # If audio is longer than anchor mapping, loop
-                filled = beat_frame_idxs[-1] if beat_frame_idxs else 0
+                filled = beat_frame_idxs[-1] if len(beat_frame_idxs) > 0 else 0
                 if filled < target_n_frames:
                     loop_count = 0
                     while filled < target_n_frames:
@@ -158,7 +180,10 @@ class BAIS1C_MusicControlNet:
                     report.append(f"Pose looped {loop_count}x to fit extra audio.")
 
             else:
-                # ✅ FRAME-ALIGNED FALLBACK: stretch/cut/loop pose tensor
+                # ✅ FRAME-ALIGNED FALLBACK: stretch/cut/loop pose tensor to match NEW audio duration
+                if debug:
+                    print(f"[MusicControlNet] Frame-aligned fallback: {original_n_frames} → {target_n_frames} frames")
+                
                 if target_n_frames == original_n_frames:
                     retargeted_pose = pose_tensor
                     report.append("No retiming: pose and audio are same length.")
@@ -166,10 +191,16 @@ class BAIS1C_MusicControlNet:
                     retargeted_pose = pose_tensor[:target_n_frames]
                     report.append(f"Cut pose: {original_n_frames} → {target_n_frames} frames.")
                 else:
+                    # ✅ EXTENSION LOGIC: Loop poses to fill longer audio
                     n_repeats = target_n_frames // original_n_frames
                     remainder = target_n_frames % original_n_frames
-                    retargeted_pose = np.concatenate([pose_tensor] * n_repeats + [pose_tensor[:remainder]], axis=0)
-                    report.append(f"Looped pose: {original_n_frames} → {target_n_frames} frames ({n_repeats} loops).")
+                    
+                    looped_parts = [pose_tensor] * n_repeats
+                    if remainder > 0:
+                        looped_parts.append(pose_tensor[:remainder])
+                    
+                    retargeted_pose = np.concatenate(looped_parts, axis=0)
+                    report.append(f"Extended pose: {original_n_frames} → {target_n_frames} frames ({n_repeats} full loops + {remainder} partial frames).")
 
             # ✅ FINAL VALIDATION: Ensure we never return empty tensors
             if retargeted_pose.shape[0] == 0:
@@ -181,7 +212,7 @@ class BAIS1C_MusicControlNet:
             new_meta = dict(sync_meta)
             new_meta.update(audio_meta)
             new_meta["anchor_idxs"] = anchor_idxs
-            new_meta["beat_frame_idxs"] = beat_frame_idxs if sync_mode == "beat_aligned" and len(beat_times) > 1 else []
+            new_meta["beat_frame_idxs"] = beat_frame_idxs.tolist() if sync_mode == "beat_aligned" and len(beat_times) > 1 else []
             new_meta["retimed_to_audio"] = True
             new_meta["final_n_frames"] = retargeted_pose.shape[0]
             new_meta["final_duration"] = audio_duration
