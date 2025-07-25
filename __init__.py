@@ -1,73 +1,82 @@
-# BAIS1C VACE Dance Sync Suite
-# Main initialization file for ComfyUI custom node package
-#
-# This suite provides:
-# - Video source loading with BPM analysis
-# - Pose tensor extraction using DWPose
-# - Music-synchronized dance animation (Music Control Net)
-# - Professional-grade BPM/FPS synchronization
+# BAIS1C VACE Dance Sync Suite - Node Registration
+# Registers all ComfyUI nodes for the suite
 
-import os
-import sys
+from .BAIS1C_SourceVideoLoader import NODE_CLASS_MAPPINGS as LOADER_NODES, NODE_DISPLAY_NAME_MAPPINGS as LOADER_DISPLAY
+from .pose_tensor_extract import NODE_CLASS_MAPPINGS as EXTRACT_NODES, NODE_DISPLAY_NAME_MAPPINGS as EXTRACT_DISPLAY
+from .BAIS1C_MusicControlNet import NODE_CLASS_MAPPINGS as CONTROL_NODES, NODE_DISPLAY_NAME_MAPPINGS as CONTROL_DISPLAY
+from .BAIS1C_SimpleDancePoser import NODE_CLASS_MAPPINGS as SIMPLE_NODES, NODE_DISPLAY_NAME_MAPPINGS as SIMPLE_DISPLAY
+from .pose_checkpoint import NODE_CLASS_MAPPINGS as CHECKPOINT_NODES, NODE_DISPLAY_NAME_MAPPINGS as CHECKPOINT_DISPLAY
+from .save_pose_json import NODE_CLASS_MAPPINGS as SAVE_NODES, NODE_DISPLAY_NAME_MAPPINGS as SAVE_DISPLAY
+from .BAIS1C_PoseToVideoRenderer import NODE_CLASS_MAPPINGS as RENDERER_NODES, NODE_DISPLAY_NAME_MAPPINGS as RENDERER_DISPLAY
 
-# Add the suite directory to Python path for internal imports
-suite_dir = os.path.dirname(os.path.abspath(__file__))
-if suite_dir not in sys.path:
-    sys.path.insert(0, suite_dir)
+# Initialize node mappings
+NODE_CLASS_MAPPINGS = {}
+NODE_DISPLAY_NAME_MAPPINGS = {}
 
-# Import node registrations from nodes package
-try:
-    from .nodes import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
+# Register BAIS1C Source Video Loader
+NODE_CLASS_MAPPINGS.update(LOADER_NODES)
+NODE_DISPLAY_NAME_MAPPINGS.update(LOADER_DISPLAY)
+
+# Register Pose Tensor Extractor  
+NODE_CLASS_MAPPINGS.update(EXTRACT_NODES)
+NODE_DISPLAY_NAME_MAPPINGS.update(EXTRACT_DISPLAY)
+
+# Register BAIS1C Music Control Net (core sync logic)
+NODE_CLASS_MAPPINGS.update(CONTROL_NODES)
+NODE_DISPLAY_NAME_MAPPINGS.update(CONTROL_DISPLAY)
+
+# Register BAIS1C Simple Dance Poser (creative experimentation)
+NODE_CLASS_MAPPINGS.update(SIMPLE_NODES)
+NODE_DISPLAY_NAME_MAPPINGS.update(SIMPLE_DISPLAY)
+
+# Register Pose Checkpoint
+NODE_CLASS_MAPPINGS.update(CHECKPOINT_NODES)
+NODE_DISPLAY_NAME_MAPPINGS.update(CHECKPOINT_DISPLAY)
+
+# Register Save Pose JSON
+NODE_CLASS_MAPPINGS.update(SAVE_NODES)
+NODE_DISPLAY_NAME_MAPPINGS.update(SAVE_DISPLAY)
+
+# Register Pose To Video Renderer (new visualization node)
+NODE_CLASS_MAPPINGS.update(RENDERER_NODES)
+NODE_DISPLAY_NAME_MAPPINGS.update(RENDERER_DISPLAY)
+
+# Debug: Print registered nodes
+print(f"[BAIS1C VACE Suite] Registered {len(NODE_CLASS_MAPPINGS)} nodes:")
+for node_name, display_name in NODE_DISPLAY_NAME_MAPPINGS.items():
+    print(f"  - {display_name} ({node_name})")
+
+# Validation: Ensure all nodes have proper registration
+def validate_node_registration():
+    """Validate that all nodes are properly registered"""
+    issues = []
     
-    print(f"[BAIS1C VACE Suite] Successfully loaded custom node suite from: {suite_dir}")
-    print(f"[BAIS1C VACE Suite] Available components:")
-    print(f"  - Source Video Loader (video + audio + BPM analysis)")  
-    print(f"  - Pose Tensor Extractor (DWPose → 128-point JSON)")
-    print(f"  - Music Control Net (pose-to-music synchronization)")
-    print(f"  - Dance library management")
-    print(f"  - Professional BPM/FPS sync algorithms")
+    for node_name, node_class in NODE_CLASS_MAPPINGS.items():
+        # Check if node has display name
+        if node_name not in NODE_DISPLAY_NAME_MAPPINGS:
+            issues.append(f"Missing display name for {node_name}")
+        
+        # Check if node class has required methods
+        if not hasattr(node_class, 'INPUT_TYPES'):
+            issues.append(f"{node_name} missing INPUT_TYPES classmethod")
+        
+        if not hasattr(node_class, 'RETURN_TYPES'):
+            issues.append(f"{node_name} missing RETURN_TYPES")
+        
+        if not hasattr(node_class, 'FUNCTION'):
+            issues.append(f"{node_name} missing FUNCTION")
+        
+        if not hasattr(node_class, 'CATEGORY'):
+            issues.append(f"{node_name} missing CATEGORY")
     
-    # Check for required directories
-    dance_library_dir = os.path.join(suite_dir, "dance_library")
-    dwpose_models_dir = os.path.abspath(os.path.join(suite_dir, "..","..", "models", "dwpose"))
-    
-    if os.path.exists(dance_library_dir):
-        json_count = len([f for f in os.listdir(dance_library_dir) if f.endswith('.json')])
-        print(f"[BAIS1C VACE Suite] Dance library: {json_count} poses available")
+    if issues:
+        print(f"[BAIS1C VACE Suite] ⚠️ Registration issues found:")
+        for issue in issues:
+            print(f"  - {issue}")
+        return False
     else:
-        print(f"[BAIS1C VACE Suite] ⚠️ Dance library directory not found: {dance_library_dir}")
-    
-    # Fixed DWPose check to match the working detector path
-    if os.path.exists(dwpose_models_dir):
-        onnx_files = [f for f in os.listdir(dwpose_models_dir) if f.endswith('.onnx')]
-        if len(onnx_files) >= 2:
-            print(f"[BAIS1C VACE Suite] ✅ DWPose models found: {len(onnx_files)} ONNX files")
-        else:
-            print(f"[BAIS1C VACE Suite] ⚠️ DWPose models incomplete: {len(onnx_files)}/2 ONNX files")
-            print(f"[BAIS1C VACE Suite] Required: yolox_l.onnx, dw-ll_ucoco_384.onnx")
-    else:
-        print(f"[BAIS1C VACE Suite] ⚠️ DWPose directory not found: {dwpose_models_dir}")
-    
-    # Export for ComfyUI
-    __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS"]
-    
-except ImportError as e:
-    print(f"[BAIS1C VACE Suite] ❌ Failed to load nodes: {e}")
-    print(f"[BAIS1C VACE Suite] Suite directory: {suite_dir}")
-    print(f"[BAIS1C VACE Suite] Check that all required files are present:")
-    print(f"  - nodes/__init__.py")
-    print(f"  - nodes/BAIS1C_SourceVideoLoader.py") 
-    print(f"  - nodes/pose_tensor_extract.py")
-    print(f"  - nodes/music_control_net.py")
-    print(f"  - dwpose/ directory with ONNX models")
-    
-    # Provide empty mappings to prevent ComfyUI errors
-    NODE_CLASS_MAPPINGS = {}
-    NODE_DISPLAY_NAME_MAPPINGS = {}
-    
-    raise
+        print(f"[BAIS1C VACE Suite] ✅ All nodes registered correctly")
+        return True
 
-# Suite metadata
-__version__ = "1.0.0"
-__author__ = "BAIS1C"
-__description__ = "Professional dance synchronization suite for ComfyUI"
+# Run validation on import
+validate_node_registration()
