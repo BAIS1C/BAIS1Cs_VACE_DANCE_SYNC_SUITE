@@ -39,8 +39,8 @@ graph TD
     A[🎦 VHS_LoadVideo<br/>Images + Audio] --> B[📦 BAIS1C_SourceVideoLoader<br/>BPM Detection & Meta Prep]
     B --> C[🎬 BAIS1C_PoseExtractor<br/>DWPose + Metadata]
     C --> D[🎵 BAIS1C_MusicControlNet<br/>Beat Sync & Modulation]
-    D --> E[💃 BAIS1C_SimpleDancePoser<br/>Creative Dance Generation COMING SOON]
-    E --> F[💾 BAIS1C_SavePoseJSON<br/>Library Export COMING SOON]
+    D --> E[💃 BAIS1C_SimpleDancePoser<br/>Creative Dance Generation]
+    E --> F[💾 BAIS1C_SavePoseJSON<br/>Library Export]
     
     style A fill:#e1f5fe
     style B fill:#f3e5f5
